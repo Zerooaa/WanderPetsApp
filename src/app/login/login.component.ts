@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RegisterDetailsService } from '../share/register-details.service';
 import { NgForm } from '@angular/forms';
@@ -7,6 +7,7 @@ import { RegisterDetails } from '../share/register-details.model';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { Router, Routes } from '@angular/router';
+import { NavbarService } from '../services/navbar-service';
 
 @Component({
   selector: 'app-login',
@@ -14,17 +15,22 @@ import { Router, Routes } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginObj: Login;
   constructor(public service: RegisterDetailsService,
               private authService: AuthService,
               private toastr: ToastrService,
               private http: HttpClient,
-              private router: Router) {
+              private router: Router,
+              private navbarService: NavbarService) {
     this.loginObj = new Login();
   }
+  ngOnDestroy(): void {
+    this.navbarService.display();
+  }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.navbarService.hide();
   }
 
   onSubmit(){
