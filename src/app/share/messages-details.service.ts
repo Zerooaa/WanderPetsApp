@@ -4,33 +4,23 @@ import { environment } from '../../environments/environment';
 import { RegisterDetails } from './register-details.model';
 import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { MessagesDetails } from './messages-details.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RegisterDetailsService {
-
-  url: string = environment.apiBaseUrl + '/RegisterDetails';
+export class MessagesDetailsService{
+  formMessage: MessagesDetails = new MessagesDetails();
+  url: string = environment.apiBaseUrl + '/MessagesDetails';
   list: RegisterDetails[] = [];
-  formData: RegisterDetails = new RegisterDetails();
   constructor(private http: HttpClient) { }
 
-  refreshList() {
-    this.http.get(this.url)
-    .subscribe({
-      next: res => {
-        this.list = res as RegisterDetails[]
-      },
-      error: err => { console.log(err); }
-    });
-    }
-
   postRegisterDetails() {
-    return this.http.post(this.url, this.formData);
+    return this.http.post(this.url, this.formMessage);
   }
   resetForm(form: NgForm) {
     form.form.reset();
-    this.formData = new RegisterDetails();
+    this.formMessage = new MessagesDetails();
   }
-
 }
+

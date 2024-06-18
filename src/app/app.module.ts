@@ -14,7 +14,7 @@ import { NavBarComponent } from './navbar/navbar.component';
 import { ContactComponent } from './contact/contact.component';
 import { AboutComponent } from './about/about.component';
 import { LoginComponent } from './login/login.component';
-import { HomepageComponent } from './homepage/homepage.component';
+import { HomepageComponent } from './homepage/HomepageComponent';
 import { LandingComponent } from './landing/landing.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { AuthService } from './services/auth-service';
