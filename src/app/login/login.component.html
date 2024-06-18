@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="login.component.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="left">
+      <div class="logo">
+        <img src="https://github.com/Zerooaa/Appdev/blob/master/public/gilby's%20(2).png?raw=true" style="width: 600px;">
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="login-container">
+        <h2>Login</h2>
+        <form>
+          <input type="email"   placeholder="Email/Username" name="userName" [(ngModel)] = "loginObj.userName" required>
+          <input type="password"  placeholder="Password" name="userPassword" [(ngModel)] = "loginObj.userPassword" required>
+          <a href="" class="forgot-password">Forgot Password?</a>
+          <button type="button"  (click)="onSubmit()">LOGIN</button>
+        </form>
+        <p>Don't have an account? <a href="/registerPage">Sign-Up</a></p>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>

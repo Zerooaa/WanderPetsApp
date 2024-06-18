@@ -1,0 +1,39 @@
+
+.landing-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 220px;
+  padding: 20px;
+}
+.content-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  width: 100%;
+}
+.text-container {
+  max-width: 600px;
+  margin-right: 20px;
+}
+.text-container h1 {
+  font-size: 36px;
+  color: #956935;
+  margin-bottom: 20px;
+}
+.text-container p {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 20px;
+}
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.paw-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="register-details.component.css">
+</head>
+<body>
+  <div class="container">
+    <div class="title">Register</div>
+    <form #form="ngForm" (submit)="onSubmit(form)">
+      <input type="hidden" name="userID" #userId="ngModel" [(ngModel)] = "service.formData.userID">
+      <div class="user-details">
+        <div class="input-box">
+          <span class="details">Username</span>
+          <input type="text" placeholder="Enter Your Username" #userName="ngModel" name="userName" [(ngModel)] = "service.formData.userName" required>
+        </div>
+        <div class="input-box">
+          <span class="details">Full Name</span>
+          <input type="text"id="fullName" placeholder="Enter Your Full Name" #fullName="ngModel" name="fullName" [(ngModel)] = "service.formData.fullName" required>
+        </div>
+        <div class="input-box">
+          <span class="details">Email</span>
+          <input type="text" id="userEmail" placeholder="Enter Your Email" #userEmail="ngModel" name="fullName" [(ngModel)] = "service.formData.userEmail" required>
+
+        </div>
+        <div class="input-box">
+          <span class="details">Phone Number</span>
+          <input type="text" id="userPhone" placeholder="Enter Your Phone Number" #userPhone="ngModel" name="userPhone" [(ngModel)] = "service.formData.userPhone" required>
+
+        </div>
+        <div class="input-box">
+          <span class="details">Password</span>
+          <input type="password" id="userPassword" placeholder="Enter Your Password" #userPassword = "ngModel" name="userPassword" [(ngModel)] = "service.formData.userPassword" required>
+
+        </div>
+        <div class="input-box">
+          <span class="details">Confirm Password</span>
+          <input type="password" id="confirmPassword" placeholder="Confirm your Password" required>
+        </div>
+      </div>
+      <div class="registerButton">
+        <input type="submit" value="Register">
+      </div>
+    </form>
+  </div>
+  <div class="container2">
+    <img src="https://github.com/Zerooaa/Appdev/blob/master/public/gilby's%20(2).png?raw=true" style="width: 600px;">
+  </div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+.post-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  margin-top: -50px;
+}
+
+.post-form {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #763C00;
+  border-radius: 50px;
+  background-color: #FFF8DC;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+}
+
+.profile-text {
+  display: flex;
+  align-items: center;
+  width: 90%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.profile-pic {
+  margin-right: 20px;
+}
+
+.profile-pic img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+#post-textarea {
+  width: 80%;
+  height: 70px;
+  border-radius: 10px;
+  border: 1px solid #763C00;
+  padding: 10px;
+  transition: height 0.3s ease;
+}
+
+#post-textarea.expanded {
+  height: 100px;
+}
+
+.form-controls {
+  display: flex;
+  width: 80%;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.add-photo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.add-photo-input {
+  display: none;
+}
+
+.add-photo-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #8B4513;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-photo-label i {
+  margin-bottom: 5px;
+}
+
+.location, .add-tag {
+  display: flex;
+  align-items: center;
+}
+
+.location label, .add-tag label {
+  margin-right: 20px;
+  color: #8B4513;
+}
+
+.location input, .add-tag input {
+  border: 1px solid #8B4513;
+  border-radius: 30px;
+  padding: 10px;
+}
+
+.post-button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.post-button {
+  font-weight: bolder;
+  background-color: #8B4513;
+  color: white;
+  border: none;
+  padding: 10px 40px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.filter {
+  position: absolute;
+  right: 15%;
+  bottom: -30px;
+}
+
+.filter button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.filter button img {
+  width: 30px;
+  height: 30px;
+}
