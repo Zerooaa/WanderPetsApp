@@ -17,26 +17,46 @@
            <span class="second-text">Connect with Us:</span>
            <ul class="social-media">
               <li><a href="https://www.facebook.com/WanderPetsInc"><i class='bx bxl-facebook'></i></a></li>
-              <li><a href="https://x.com/WanderPetsPh
-                Instagram: "><i class='bx bxl-twitter'></i></a></li>
+              <li><a href="https://x.com/WanderPetsPh"><i class='bx bxl-twitter'></i></a></li>
               <li><a href="https://www.instagram.com/wanderpets_ph/"><i class='bx bxl-instagram'></i></a></li>
            </ul>
         </div>
       </div>
       <div class="submit-form">
         <h4 class="third-text">Contact Us</h4>
-        <form #form="ngForm" (submit)="onSubmit(form)">
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
             <div class="input-box">
-              <input type="text" class="input" #contactName = "ngModel" name="contactName" [(ngModel)] ="service.formMessage.contactName" required>
+              <input type="text" formControlName="contactName" name="contactName" class="input" required>
               <label for="">Name</label>
+              <span *ngIf="!contactName?.valid && contactName!.touched" class="error-block">
+                Full Name is Required
+              </span>
             </div>
             <div class="input-box">
-              <input type="email" class="input" #contactEmail ="ngModel" name="contactEmail"  [(ngModel)] = "service.formMessage.contactEmail" required>
+              <input type="email" formControlName="contactEmail" name="contactEmail" class="input" required>
               <label for="">Email</label>
+              <span *ngIf="!contactEmail?.valid && contactEmail!.touched" class="error-block">
+                <span *ngIf="contactEmail.hasError('required')">
+                  Email is Required
+                </span>
+                <span *ngIf="contactEmail.hasError('email')">
+                  Incorrect Format of Email (abc&#64;email.com)
+                </span>
+              </span>
             </div>
             <div class="input-box">
-              <textarea name="message" class="input" #contactMessage = "ngModel" name="userMessage"  [(ngModel)] = "service.formMessage.contactMessage" placeholder="Message" cols="30" rows="10"></textarea>
+              <input type="tel" formControlName="contactPhone" name="contactPhone" class="input" required>
+              <label for="">Phone</label>
+              <span *ngIf="!contactPhone?.valid && contactPhone!.touched" class="error-block">
+                Input 10 Characters Long and Numbers Only
+              </span>
             </div>
+            <div class="input-box">
+              <textarea name="contactMessage" formControlName="contactMessage" class="input" placeholder="Message" required id="message" cols="30" rows="10"></textarea>
+              <span *ngIf="!contactMessage?.valid && contactMessage!.touched" class="error-block">
+                Insufficient Message
+              </span>
+            </div>  
             <input type="submit" class="btn" value="Submit">
         </form>
       </div>

@@ -18,6 +18,7 @@ import { HomepageComponent } from './homepage/HomepageComponent';
 import { LandingComponent } from './landing/landing.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { AuthService } from './services/auth-service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: '', redirectTo: '/landingPage', pathMatch: 'full'},
@@ -50,7 +51,8 @@ const routes: Routes = [
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     BsDropdownModule.forRoot(),
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    ReactiveFormsModule
 
   ],
   providers: [

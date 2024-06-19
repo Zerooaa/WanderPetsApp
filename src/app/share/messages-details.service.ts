@@ -10,6 +10,9 @@ import { MessagesDetails } from './messages-details.model';
   providedIn: 'root'
 })
 export class MessagesDetailsService{
+  postMessageDetails(value: any): Observable<any> {
+    throw new Error('Method not implemented.');
+  }
   formMessage: MessagesDetails = new MessagesDetails();
   url: string = environment.apiBaseUrl + '/MessagesDetails';
   list: RegisterDetails[] = [];
