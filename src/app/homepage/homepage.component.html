@@ -1,7 +1,5 @@
-
-<form #form="ngForm" (submit)="onSubmit(form)">
 <div class="post-form-container">
-    <div class="post-form">
+    <form #form="ngForm" (submit)="onSubmit(form)" class="post-form">
         <div class="profile-text">
             <div class="profile-pic">
                 <img src="#" alt="Profile Picture">
@@ -21,7 +19,7 @@
             <div class="add-photo-container">
                 <input type="file" id="add-photo" #postImage="ngModel" name="postImage" [(ngModel)] = "service.formMessage.postImage" class="add-photo-input">
                 <label for="add-photo" class="add-photo-label">
-                  Add Photo
+                Add Photo
                 </label>
             </div>
             <div class="location">
@@ -36,9 +34,7 @@
         <div *ngIf="isExpanded" class="post-button-container">
             <button type="submit" class="post-button">POST!</button>
         </div>
-    </div>
-</div>
-</form>
+    </form>
     <div class="filter">
         <button (click)="toggleFilterPopup()">
             <img src="filter.png" alt="Filter">
@@ -60,6 +56,5 @@
                 </button>
             </div>
         </div>
-  </div>
-
-
+    </div>
+</div>
