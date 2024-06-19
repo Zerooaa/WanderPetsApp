@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RegisterDetailsService } from '../share/register-details.service';
 import { NavbarService } from '../services/navbar-service';
 import { Subscription } from 'rxjs';
 
@@ -10,26 +9,25 @@ import { Subscription } from 'rxjs';
 })
 export class NavBarComponent implements OnInit, OnDestroy {
   loggedinUser: string = ''; // Replace with actual user data if available
-  showNavbar!: boolean;
+  showNavbar: boolean = false;
   subscription: Subscription;
-  constructor(private registerService: RegisterDetailsService, private navbarService : NavbarService) {
-    this.subscription = this.navbarService.showNavbar.subscribe((value => {
+
+  constructor(private navbarService: NavbarService) {
+    this.subscription = this.navbarService.getNavbarState().subscribe((value: boolean) => {
       this.showNavbar = value;
-    }));
+    });
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 
-  ngOnInit(){
-  }
-
-  loggedIn() {
-    return this.loggedinUser !== '';
+  ngOnInit() {
+    this.showNavbar = false;
   }
 
   onLogout() {
     this.loggedinUser = '';
+    this.navbarService.hide();
   }
 }
