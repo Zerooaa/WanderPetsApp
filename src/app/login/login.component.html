@@ -20,6 +20,7 @@
         <form>
           <input type="email"   placeholder="Email/Username" name="userName" [(ngModel)] = "loginObj.userName" required>
           <input type="password"  placeholder="Password" name="userPassword" [(ngModel)] = "loginObj.userPassword" required>
+          <a href="" class="forgot-password">Forgot Password?</a>
           <button type="button"  (click)="onSubmit()">LOGIN</button>
         </form>
         <p>Don't have an account? <a href="/registerPage">Sign-Up</a></p>
