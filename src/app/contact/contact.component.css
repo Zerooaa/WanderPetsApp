@@ -148,7 +148,9 @@ textarea.input{
 .ng-invalid.ng-touched{
     border-color: red;
 }
-.error-block{
-    font-size: 12px;
-    color: red;
+
+.error {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
 }

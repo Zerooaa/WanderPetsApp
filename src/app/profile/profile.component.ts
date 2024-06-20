@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,26 @@ export class ProfileComponent implements OnInit {
 
   originalProfileData: any = {};
   isEditing: boolean = false;
+
+  @ViewChild('fileInput') fileInput!: ElementRef;
+
+  triggerFileInput() {
+    this.fileInput.nativeElement.click();
+  }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('profilePicture', file);
+
+      this.http.post('/api/profile-picture', formData).subscribe((response: any) => {
+        this.profilePictureUrl = response.profilePictureUrl;
+      }, error => {
+        console.error('Error uploading profile picture', error);
+      });
+    }
+  }
 
   constructor(private http: HttpClient) { }
 
@@ -93,16 +114,5 @@ export class ProfileComponent implements OnInit {
     this.loggedinUserContactNo = this.originalProfileData.loggedinUserContactNo;
     this.loggedinUserQuote = this.originalProfileData.loggedinUserQuote;
     this.profilePictureUrl = this.originalProfileData.profilePictureUrl;
-  }
-
-  onFileSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.profilePictureUrl = reader.result as string;
-      };
-      reader.readAsDataURL(file);
-    }
   }
 }

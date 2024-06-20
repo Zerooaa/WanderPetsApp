@@ -22,6 +22,21 @@
     object-fit: cover;
     margin-bottom: 10px;
 }
+
+.change-picture-button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #CD6301;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+  
+.change-picture-button:hover {
+    background-color: #8B4513;
+}
+  
   
 .profile-info {
     text-align: center;

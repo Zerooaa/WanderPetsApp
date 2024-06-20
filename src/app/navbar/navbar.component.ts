@@ -32,8 +32,4 @@ export class NavBarComponent implements OnInit, OnDestroy {
     this.loggedinUser = '';
     this.navbarService.hide();
   }
-
-  openSettingsModal() {
-    $('#settingsModal').modal('show');
-  }
 }

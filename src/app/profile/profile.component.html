@@ -1,7 +1,9 @@
 <div class="profile-container">
     <div class="profile-header">
         <button class="edit-button" (click)="isEditing = true"><img src="/edit.png"></button>
-        <img src="/cat.png" alt="Profile Picture" class="profile-picture">
+        <img [src]="profilePictureUrl" alt="Profile Picture" class="profile-picture">
+        <button class="change-picture-button" (click)="triggerFileInput()">Change Picture</button>
+        <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)">
         <div class="profile-info">
             <h2 class="profile-name">{{ loggedinUser }}</h2>
             <p class="profile-username">{{ loggedinUserName }}</p>
@@ -27,7 +29,6 @@
             <input type="email" [(ngModel)]="loggedinUserEmail" placeholder="Email" required class="form-control" />
             <input type="text" [(ngModel)]="loggedinUserContactNo" placeholder="Contact No" required class="form-control" />
             <input type="text" [(ngModel)]="loggedinUserQuote" placeholder="Quote" required class="form-control" />
-            <input type="file" (change)="onFileSelected($event)">
             <div class="button-container">
                 <button class="save-button" (click)="saveProfile()">Save</button>
                 <button class="cancel-button" (click)="isEditing = false">Cancel</button>

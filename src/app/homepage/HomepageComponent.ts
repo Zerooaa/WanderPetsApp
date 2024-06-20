@@ -16,6 +16,8 @@ export class HomepageComponent {
   isExpanded: boolean = false;
   isPopupVisible: boolean = false;
   selectedFile: File | null = null;
+  selectedFileName: string | null = null;
+  photoPreview: string | null = null;
 
   constructor(private eRef: ElementRef,
     private renderer: Renderer2,
@@ -42,8 +44,25 @@ export class HomepageComponent {
   onFileSelected(event: any) {
     if (event.target.files.length > 0) {
       this.selectedFile = event.target.files[0];
+      this.selectedFileName = this.selectedFile ? this.selectedFile.name : null;
+
+      // Generate a preview of the selected image
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.photoPreview = e.target.result;
+      };
+      if (this.selectedFile) {
+        reader.readAsDataURL(this.selectedFile);
+      }
     }
   }
+
+  resetPhotoSelection() {
+    this.selectedFile = null;
+    this.selectedFileName = null;
+    this.photoPreview = null;
+  }
+
 
   onSubmit(form: NgForm) {
     if (form.valid) {
