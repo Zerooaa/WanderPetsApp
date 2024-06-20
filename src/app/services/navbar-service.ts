@@ -1,21 +1,25 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class NavbarService{
+export class NavbarService {
+  showNavbar: BehaviorSubject<boolean>;
 
-  showNavbar: BehaviorSubject <boolean>;
-
-  constructor(){
+  constructor() {
     this.showNavbar = new BehaviorSubject<boolean>(false);
   }
 
-  hide(){
+  hide() {
     this.showNavbar.next(false);
   }
-  display(){
+
+  display() {
     this.showNavbar.next(true);
+  }
+
+  getNavbarState() {
+    return this.showNavbar.asObservable();
   }
 }

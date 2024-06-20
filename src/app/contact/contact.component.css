@@ -145,3 +145,10 @@ textarea.input{
     cursor: pointer;
     font-weight: 500;
 }
+.ng-invalid.ng-touched{
+    border-color: red;
+}
+.error-block{
+    font-size: 12px;
+    color: red;
+}

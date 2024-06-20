@@ -9,8 +9,10 @@ import { MessagesDetails } from './messages-details.model';
 @Injectable({
   providedIn: 'root'
 })
-export class MessagesDetailsService {
-[x: string]: any;
+export class MessagesDetailsService{
+  postMessageDetails(value: any): Observable<any> {
+    throw new Error('Method not implemented.');
+  }
   formMessage: MessagesDetails = new MessagesDetails();
   url: string = environment.apiBaseUrl + '/PostMessages';
   constructor(private http: HttpClient) { }

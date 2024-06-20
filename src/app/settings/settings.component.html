@@ -1,0 +1,14 @@
+<div class="account-settings-container">
+    <div class="settings-content">
+        <H2>ACCOUNT SETTINGS</H2>
+        <form class="credentials">
+            <input type="email" [(ngModel)]="changeEmail" placeholder="Change Email" required class="form-control" />
+            <input type="password" [(ngModel)]="changePassword" placeholder="Change Password" required class="form-control" />
+            <input type="password" [(ngModel)]="confirmPassword" placeholder="Confirm Password" required class="form-control" />
+            <div class="button-container">
+                <button class="save-button" (click)="saveSettings()">Save</button>
+                <button class="cancel-button" (click)="cancelSettings()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

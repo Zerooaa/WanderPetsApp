@@ -109,19 +109,20 @@
 
 .post-button {
   font-weight: bolder;
-  background-color: #8B4513;
+  background-color: #956935;
   color: white;
   border: none;
   padding: 10px 40px;
   border-radius: 10px;
   cursor: pointer;
 }
+.post-button:hover {
+  background-color: #8B4513;
+}
 
 .filter {
-  position: absolute;
-  right: 15%;
-  bottom: -30px;
-  flex: 1;
+  position: relative;
+  right: -30%;
 }
 
 .filter button {

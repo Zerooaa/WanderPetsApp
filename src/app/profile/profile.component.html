@@ -1,0 +1,37 @@
+<div class="profile-container">
+    <div class="profile-header">
+        <button class="edit-button" (click)="isEditing = true"><img src="/edit.png"></button>
+        <img src="/cat.png" alt="Profile Picture" class="profile-picture">
+        <div class="profile-info">
+            <h2 class="profile-name">{{ loggedinUser }}</h2>
+            <p class="profile-username">{{ loggedinUserName }}</p>
+            <p class="profile-role">{{ loggedinUserRole }}</p>
+            <p class="profile-address">Address: {{ loggedinUserAddress }}</p>
+            <p class="profile-email">Email: {{ loggedinUserEmail }}</p>
+            <p class="profile-contact">Contact No: {{ loggedinUserContactNo }}</p>
+            <span class="profile-quote">"{{ loggedinUserQuote }}"</span>
+        </div>
+    </div>
+</div>
+<div class="petlisting-container">
+    <h1>PET LISTINGS</h1>
+</div>
+
+<div *ngIf="isEditing" class="editing-container">
+    <div class="editing-content">
+        <form class="profile-info">
+            <input type="text" [(ngModel)]="loggedinUser" placeholder="Name" required class="form-control" />
+            <input type="text" [(ngModel)]="loggedinUserName" placeholder="Username" required class="form-control" />
+            <input type="text" [(ngModel)]="loggedinUserRole" placeholder="Role" required class="form-control" />
+            <input type="text" [(ngModel)]="loggedinUserAddress" placeholder="Address" required class="form-control" />
+            <input type="email" [(ngModel)]="loggedinUserEmail" placeholder="Email" required class="form-control" />
+            <input type="text" [(ngModel)]="loggedinUserContactNo" placeholder="Contact No" required class="form-control" />
+            <input type="text" [(ngModel)]="loggedinUserQuote" placeholder="Quote" required class="form-control" />
+            <input type="file" (change)="onFileSelected($event)">
+            <div class="button-container">
+                <button class="save-button" (click)="saveProfile()">Save</button>
+                <button class="cancel-button" (click)="isEditing = false">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

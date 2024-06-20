@@ -17,25 +17,35 @@
            <span class="second-text">Connect with Us:</span>
            <ul class="social-media">
               <li><a href="https://www.facebook.com/WanderPetsInc"><i class='bx bxl-facebook'></i></a></li>
-              <li><a href="https://x.com/WanderPetsPh
-                Instagram: "><i class='bx bxl-twitter'></i></a></li>
+              <li><a href="https://x.com/WanderPetsPh"><i class='bx bxl-twitter'></i></a></li>
               <li><a href="https://www.instagram.com/wanderpets_ph/"><i class='bx bxl-instagram'></i></a></li>
            </ul>
         </div>
       </div>
       <div class="submit-form">
         <h4 class="third-text">Contact Us</h4>
-        <form #form="ngForm" (submit)="onSubmit(form)">
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
             <div class="input-box">
-              <input type="text" class="input"  required>
+              <input type="text" class="input"  name="contactName"  required>
               <label for="">Name</label>
+              <span *ngIf="!contactName?.valid && contactName!.touched" class="error-block">
+                Full Name is Required
+              </span>
             </div>
             <div class="input-box">
               <input type="email" class="input"  name="contactEmail"  required>
               <label for="">Email</label>
+              <span *ngIf="!contactEmail?.valid && contactEmail!.touched" class="error-block">
+                <span *ngIf="contactEmail.hasError('required')">
+                  Email is Required
+                </span>
+                <span *ngIf="contactEmail.hasError('email')">
+                  Incorrect Format of Email (abc&#64;email.com)
+                </span>
+              </span>
             </div>
             <div class="input-box">
-              <textarea name="message" class="input"  placeholder="Message" cols="30" rows="10"></textarea>
+              <textarea name="message" class="input"name="userMessage"   placeholder="Message" cols="30" rows="10"></textarea>
             </div>
             <input type="submit" class="btn" value="Submit">
         </form>

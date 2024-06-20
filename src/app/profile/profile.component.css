@@ -1,0 +1,137 @@
+.profile-container {
+    background-color: #FFF3D4;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 80%;
+    margin: 20px auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #8B4513;
+}
+  
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+  
+.profile-picture {
+    border-radius: 50%;
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+  
+.profile-info {
+    text-align: center;
+}
+  
+.profile-name {
+    font-size: 30px;
+    margin: 10px 0 5px 0;
+}
+  
+.profile-username, .profile-role, .profile-quote {
+    display: flex;
+    flex-direction: column;
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.profile-address {
+    margin-top: 70px;
+}
+
+.profile-quote {
+    font-style: italic;
+}
+
+.petlisting-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+h1 {
+    color: #CD6301;
+}
+
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.form-control::placeholder {
+    color: #956935;
+}
+
+.edit-button {
+    position: absolute;
+    top: 15%;
+    right: 240px;
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.editing-container {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.editing-content {
+    background-color: #FFF3D4;
+    color: #8B4513;
+    padding: 20px;
+    border: 1px solid #8B4513;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.save-button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+  
+.cancel-button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f44336;
+    color: white;
+    cursor: pointer;
+}

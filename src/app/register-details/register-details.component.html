@@ -9,35 +9,64 @@
 <body>
   <div class="container">
     <div class="title">Register</div>
-    <form #form="ngForm" (submit)="onSubmit(form)">
-      <input type="hidden" name="userID" #userId="ngModel" [(ngModel)] = "service.formData.userID">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
       <div class="user-details">
         <div class="input-box">
           <span class="details">Username</span>
-          <input type="text" placeholder="Enter Your Username" #userName="ngModel" name="userName" [(ngModel)] = "service.formData.userName" required>
+          <input type="text" formControlName="userName" placeholder="Enter Your Username">
+          <span *ngIf="!userName?.valid && (userName!.touched || userSubmitted)" class="error-block">
+            Username is Required
+          </span>
         </div>
         <div class="input-box">
           <span class="details">Full Name</span>
-          <input type="text"id="fullName" placeholder="Enter Your Full Name" #fullName="ngModel" name="fullName" [(ngModel)] = "service.formData.fullName" required>
+          <input type="text" id="fullName" formControlName="fullName" placeholder="Enter Your Full Name">
+          <span *ngIf="!fullName?.valid && (fullName!.touched || userSubmitted)" class="error-block">
+            Full Name is Required
+          </span>
         </div>
         <div class="input-box">
           <span class="details">Email</span>
-          <input type="text" id="userEmail" placeholder="Enter Your Email" #userEmail="ngModel" name="fullName" [(ngModel)] = "service.formData.userEmail" required>
-
+          <input type="text" id="userEmail" formControlName="userEmail" placeholder="Enter Your Email">
+          <span *ngIf="!userEmail?.valid && (userEmail!.touched || userSubmitted)" class="error-block">
+              <span *ngIf="userEmail.hasError('required')">
+                Email is Required
+              </span>
+              <span *ngIf="userEmail.hasError('email')">
+                Incorrect Format of Email (abc&#64;email.com)
+              </span>
+          </span>
         </div>
         <div class="input-box">
           <span class="details">Phone Number</span>
-          <input type="text" id="userPhone" placeholder="Enter Your Phone Number" #userPhone="ngModel" name="userPhone" [(ngModel)] = "service.formData.userPhone" required>
-
+          <input type="text" id="userPhone" formControlName="userPhone" placeholder="Enter Your Phone Number">
+          <span *ngIf="!userPhone?.valid && (userPhone!.touched || userSubmitted)" class="error-block">
+            Input 11 Characters Long and Numbers Only
+          </span>
         </div>
         <div class="input-box">
           <span class="details">Password</span>
-          <input type="password" id="userPassword" placeholder="Enter Your Password" #userPassword = "ngModel" name="userPassword" [(ngModel)] = "service.formData.userPassword" required>
-
+          <input type="password" id="userPassword" formControlName="userPassword" placeholder="Enter Your Password">
+          <span *ngIf="!userPassword?.valid && (userPassword!.touched || userSubmitted)" class="error-block">
+            <span *ngIf="userPassword.hasError('required')">
+              Password is Required
+            </span>
+            <span *ngIf="userPassword.hasError('minlength')">
+              Password must be 8 characters long
+            </span>   
+          </span>
         </div>
         <div class="input-box">
           <span class="details">Confirm Password</span>
-          <input type="password" id="confirmPassword" placeholder="Confirm your Password" required>
+          <input type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="Confirm your Password">
+          <span *ngIf="!confirmPassword?.valid && (confirmPassword!.touched || userSubmitted)" class="error-block">
+            <span *ngIf="confirmPassword.hasError('required')">
+              Password is Required
+            </span>
+          </span>
+          <span *ngIf="registerForm.hasError('notmatched') && (confirmPassword.valid || userSubmitted)" class="error-block">
+            Passwords do not Match
+          </span>
         </div>
       </div>
       <div class="registerButton">
