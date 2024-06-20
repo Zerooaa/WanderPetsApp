@@ -20,6 +20,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { AuthService } from './services/auth-service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProfileComponent } from './profile/profile.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/landingPage', pathMatch: 'full'},
@@ -29,6 +30,8 @@ const routes: Routes = [
   { path: 'registerPage', component: RegisterDetailsComponent },
   { path: 'loginPage', component: LoginComponent },
   { path: 'homePage', component: HomepageComponent },
+  { path: 'profilePage', component: ProfileComponent },
+  { path: 'settingsPage', component: SettingsComponent }
 ];
 
 @NgModule({
@@ -41,7 +44,8 @@ const routes: Routes = [
     HomepageComponent,
     LandingComponent,
     AboutComponent,
-    ProfileComponent
+    ProfileComponent,
+    SettingsComponent
    ],
 
   imports: [

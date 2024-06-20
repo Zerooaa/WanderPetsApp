@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar-service';
 import { Subscription } from 'rxjs';
 
+declare var $: any;  // Declare jQuery
+
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './navbar.component.html',
@@ -29,5 +31,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
   onLogout() {
     this.loggedinUser = '';
     this.navbarService.hide();
+  }
+
+  openSettingsModal() {
+    $('#settingsModal').modal('show');
   }
 }
