@@ -4,6 +4,6 @@ export class RegisterDetails{
   fullName: string = ""
   userEmail: string = ""
   userPassword: string = ""
-  userPhone: number = 639
+  userPhone?: number
   subscribe: any
 }
