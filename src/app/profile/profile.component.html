@@ -19,7 +19,7 @@
 
 <div *ngIf="isEditing" class="editing-container">
     <div class="editing-content">
-        <div class="profile-info">
+        <form class="profile-info">
             <input type="text" [(ngModel)]="loggedinUser" placeholder="Name" required class="form-control" />
             <input type="text" [(ngModel)]="loggedinUserName" placeholder="Username" required class="form-control" />
             <input type="text" [(ngModel)]="loggedinUserRole" placeholder="Role" required class="form-control" />
@@ -32,6 +32,6 @@
                 <button class="save-button" (click)="saveProfile()">Save</button>
                 <button class="cancel-button" (click)="isEditing = false">Cancel</button>
             </div>
-        </div>
+        </form>
     </div>
 </div>
