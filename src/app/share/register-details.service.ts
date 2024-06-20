@@ -32,5 +32,4 @@ export class RegisterDetailsService {
     form.form.reset();
     this.formData = new RegisterDetails();
   }
-
 }

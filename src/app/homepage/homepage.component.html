@@ -1,65 +1,61 @@
-
-<form #form="ngForm" (submit)="onSubmit(form)">
 <div class="post-form-container">
-    <div class="post-form">
-        <div class="profile-text">
-            <div class="profile-pic">
-                <img src="#" alt="Profile Picture">
-            </div>
-            <textarea
-                id="post-textarea"
-                placeholder="Create a post..."
-                #postMessage = "ngModel"
-                [(ngModel)]= "service.formMessage.postMessage"
-                name="postMessage"
-                (focus)="handleInput()"
-                (input)="handleInput()"
-                [class.expanded]= "isExpanded"
-            ></textarea>
+  <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="post-form">
+      <div class="profile-text">
+          <div class="profile-pic">
+              <img src="#" alt="Profile Picture">
+          </div>
+          <textarea
+              id="post-textarea"
+              placeholder="Create a post..."
+              #postMessage = "ngModel"
+              [(ngModel)]= "service.formMessage.postMessage"
+              name="postMessage"
+              (focus)="handleInput()"
+              (input)="handleInput()"
+              [class.expanded]= "isExpanded"
+          ></textarea>
+      </div>
+      <div *ngIf="isExpanded" class="form-controls">
+
+          <div class="location">
+              <label for="location">Location:</label>
+              <input type="text" #postLocation ="ngModel" name="postLocation" [(ngModel)]= "service.formMessage.postLocation" id="location">
+          </div>
+          <div class="add-photo-container">
+            <input type="file" id="add-photo" (change)="onFileSelected($event)" #images="ngModel" name="images" [(ngModel)] = "pictureserv.formPicture.Images" class="add-photo-input">
+            <label for="add-photo" class="add-photo-label">
+            Add Photo
+            </label>
         </div>
-        <div *ngIf="isExpanded" class="form-controls">
-            <div class="add-photo-container">
-                <input type="file" id="add-photo" #postImage="ngModel" name="postImage" [(ngModel)] = "service.formMessage.postImage" class="add-photo-input">
-                <label for="add-photo" class="add-photo-label">
-                  Add Photo
-                </label>
-            </div>
-            <div class="location">
-                <label for="location">Location:</label>
-                <input type="text" #postLocation ="ngModel" name="postLocation" [(ngModel)]= "service.formMessage.postLocation" id="location">
-            </div>
-            <div class="add-tag">
-                <label for="tag">Add Tag:</label>
-                <input type="text" #postTag ="ngModel" name="postTag" [(ngModel)]= "service.formMessage.postTag" id="tag">
-            </div>
-        </div>
-        <div *ngIf="isExpanded" class="post-button-container">
-            <button type="submit" class="post-button">POST!</button>
-        </div>
-    </div>
-</div>
-</form>
-    <div class="filter">
-        <button (click)="toggleFilterPopup()">
-            <img src="filter.png" alt="Filter">
-        </button>
-        <div class="filter-popup" *ngIf="isPopupVisible">
-            <h2>Kind of Pet</h2>
-            <div class="filter-options">
-                <button class="filter-button">
-                    <img src="/cat-icon.png" alt="Cat">
-                    <span>Cat</span>
-                </button>
-                <button class="filter-button">
-                    <img src="/dog-icon.png" alt="Dog">
-                    <span>Dog</span>
-                </button>
-                <button class="filter-button">
-                    <img src="/rabbit-icon.png" alt="Rabbit">
-                    <span>Rabbit</span>
-                </button>
-            </div>
-        </div>
+          <div class="add-tag">
+              <label for="tag">Add Tag:</label>
+              <input type="text" #postTag ="ngModel" name="postTag" [(ngModel)]= "service.formMessage.postTag" id="tag">
+          </div>
+      </div>
+      <div *ngIf="isExpanded" class="post-button-container">
+          <button type="submit" class="post-button">POST!</button>
+      </div>
+  </form>
+  <div class="filter">
+      <button (click)="toggleFilterPopup()">
+          <img src="filter.png" alt="Filter">
+      </button>
+      <div class="filter-popup" *ngIf="isPopupVisible">
+          <h2>Kind of Pet</h2>
+          <div class="filter-options">
+              <button class="filter-button">
+                  <img src="/cat-icon.png" alt="Cat">
+                  <span>Cat</span>
+              </button>
+              <button class="filter-button">
+                  <img src="/dog-icon.png" alt="Dog">
+                  <span>Dog</span>
+              </button>
+              <button class="filter-button">
+                  <img src="/rabbit-icon.png" alt="Rabbit">
+                  <span>Rabbit</span>
+              </button>
+          </div>
+      </div>
   </div>
-
-
+</div>

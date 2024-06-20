@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
 })
 export class NavBarComponent implements OnInit, OnDestroy {
   loggedinUser: string = ''; // Replace with actual user data if available
-  showNavbar!: boolean;
+  showNavbar: boolean = false;
   subscription: Subscription;
   constructor(private registerService: RegisterDetailsService, private navbarService : NavbarService) {
     this.subscription = this.navbarService.showNavbar.subscribe((value => {
