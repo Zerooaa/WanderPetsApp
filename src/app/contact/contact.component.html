@@ -24,9 +24,9 @@
       </div>
       <div class="submit-form">
         <h4 class="third-text">Contact Us</h4>
-        <form #form="ngForm" (ngSubmit)="onSubmit()" novalidate>
+        <form #form="ngForm" (ngSubmit)="onSubmit(form)" novalidate>
           <div class="input-box">
-            <input type="text" class="input" #contactName="ngModel" [(ngModel)]="service.formMessage.contactName" name="contactName" required minlength="3">
+            <input type="text" class="input" #contactName="ngModel" [(ngModel)]= "service.formMessage.contactName" name="contactName" required minlength="3">
             <label for="">Name</label>
             <div *ngIf="contactName.invalid && (contactName.dirty || contactName.touched)" class="error">
               <div *ngIf="contactName.errors?.['required']">Name is required.</div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ContactDetailsService } from '../share/contact-details.service';
 
@@ -18,11 +18,12 @@ export class ContactComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSubmit() {
+  onSubmit(form: NgForm) {
     if (this.service.formMessage.contactName && this.service.formMessage.contactEmail && this.service.formMessage.userMessage) {
       this.service.postContactDetails().subscribe(
         res => {
           this.toastr.success('Message Sent successfully', 'Contact Form');
+          this.service.resetForm(form);
           console.log(res);
         },
         err => {

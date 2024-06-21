@@ -11,7 +11,7 @@ import { ContactDetails } from './contact-details.model';
 })
 export class ContactDetailsService{
   formMessage: ContactDetails = new ContactDetails();
-  url: string = environment.apiBaseUrl + '/PostMessages';
+  url: string = environment.apiBaseUrl + '/Contacts';
   constructor(private http: HttpClient) { }
 
   postContactDetails(){
