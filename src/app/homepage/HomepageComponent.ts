@@ -57,12 +57,16 @@ export class HomepageComponent {
     }
   }
 
-  resetPhotoSelection() {
+  deletePhoto() {
     this.selectedFile = null;
     this.selectedFileName = null;
     this.photoPreview = null;
+    // Reset the file input field
+    const fileInput = this.eRef.nativeElement.querySelector('#add-photo');
+    if (fileInput) {
+      fileInput.value = '';
+    }
   }
-
 
   onSubmit(form: NgForm) {
     if (form.valid) {

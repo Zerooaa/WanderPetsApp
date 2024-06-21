@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms'; // Import Validators for form validation
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-settings',
@@ -7,23 +7,23 @@ import { FormControl, Validators } from '@angular/forms'; // Import Validators f
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent {
-  changeEmail: FormControl = new FormControl('', [Validators.required, Validators.email]); // Use FormControl for validation
-  changePassword: FormControl = new FormControl('', [Validators.required, Validators.minLength(8)]); // Example: minimum length of 8 characters
-  confirmPassword: FormControl = new FormControl('', [Validators.required, Validators.minLength(8)]); // Example: minimum length of 8 characters
+  changeEmail: string = ''; // Replace with your logic for actual user data
+  changePassword: string = '';
+  confirmPassword: string = '';
   isChanging: boolean = false;
   errorMessage: string = '';
   successMessage: string = '';
 
   cancelSettings() {
     this.isChanging = false;
-    this.errorMessage = ''; // Clear error message
-    this.changeEmail.reset(); // Reset form controls
-    this.changePassword.reset();
+    this.errorMessage = '';
+    // Optionally clear/reset form fields here if needed
   }
 
   saveSettings() {
-    if (this.changeEmail.invalid || this.changePassword.invalid) {
-      this.errorMessage = 'Please provide valid email and password.';
+    // Add your validation logic if required
+    if (this.changeEmail === '' || this.changePassword === '' || this.confirmPassword === '') {
+      this.errorMessage = 'Please fill all fields.';
       return;
     }
 
@@ -31,7 +31,8 @@ export class SettingsComponent {
     setTimeout(() => {
       this.successMessage = 'Settings saved successfully.';
       this.isChanging = false;
-      this.errorMessage = ''; // Clear error message
+      this.errorMessage = '';
+      // Optionally reset form fields after successful save
     }, 1000);
   }
 }

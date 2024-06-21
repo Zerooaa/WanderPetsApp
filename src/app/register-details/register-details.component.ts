@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder, ValidationErrors, AbstractControl, NgForm} from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { RegisterDetailsService } from '../share/register-details.service';
 import { ToastrService } from 'ngx-toastr';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-register-details',
@@ -11,26 +10,37 @@ import { FormsModule } from '@angular/forms';
 })
 export class RegisterDetailsComponent implements OnInit {
 
+  confirmPasswordValue: string = '';
+
   constructor(
     public service: RegisterDetailsService,
     private toastr: ToastrService
   ) { }
 
-  ngOnInit() {
+  ngOnInit() { }
 
-  }
   onSubmit(form: NgForm) {
-    this.service.postRegisterDetails().subscribe({
-      next: (response) => {
-        console.log('Registration successful', response);
-        this.toastr.success('Registration successful!', 'Register Form');
-        this.service.resetForm(form);
-        this.service.refreshList(); // Optionally refresh the list after successful registration
-      },
-      error: (error) => {
-        console.error('Registration failed', error);
-        this.toastr.error('Failed to register.', 'Register Form');
-      }
-    });
+    if (this.service.formData.userName && 
+        this.service.formData.fullName && 
+        this.service.formData.userEmail && 
+        this.service.formData.userPhone && 
+        this.service.formData.userPassword && 
+        this.confirmPasswordValue === this.service.formData.userPassword &&
+        form.valid) {
+        this.service.postRegisterDetails().subscribe({
+        next: (response) => {
+          console.log('Registration successful', response);
+          this.toastr.success('Registration successful!', 'Register Form');
+          this.service.resetForm(form);
+          this.service.refreshList(); // Optionally refresh the list after successful registration
+        },
+        error: (error) => {
+          console.error('Registration failed', error);
+          this.toastr.error('Failed to register.', 'Register Form');
+        }
+      });
+    } else {
+      this.toastr.error('Please fill out the form correctly', 'Register Form');
+    }
   }
 }

@@ -13,6 +13,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   loggedinUser: string = ''; // Replace with actual user data if available
   showNavbar: boolean = false;
   subscription: Subscription;
+  isChanging: any;
 
   constructor(private navbarService: NavbarService) {
     this.subscription = this.navbarService.getNavbarState().subscribe((value: boolean) => {

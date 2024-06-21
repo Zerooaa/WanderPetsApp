@@ -86,7 +86,7 @@ form .registerButton input:hover{
 .ng-invalid.ng-touched{
   border-color: red;
 }
-.error-block{
+.error {
   font-size: 12px;
   color: red;
   position: absolute;

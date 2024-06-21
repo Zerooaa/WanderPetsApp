@@ -80,16 +80,43 @@
   max-height: 100px;
   margin-top: 10px;
   border-radius: 5px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.delete-photo-button {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.delete-photo-button:hover {
+  background-color: #c0392b;
 }
 
 .add-photo-label {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #8B4513;
+  color: white;
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
+  border: 1px solid #956935;
+  background-color: #956935;
+}
+
+.add-photo-label:hover {
+  background-color: #8B4513;
 }
 
 .add-photo-label i {
