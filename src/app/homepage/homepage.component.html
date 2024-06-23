@@ -17,23 +17,20 @@
     </div>
     <div *ngIf="isExpanded" class="form-controls">
       <div class="add-photo-container">
-        <div *ngIf="selectedFileName" class="photo-indication">
-          {{ selectedFileName }}
-        </div>
-        <div *ngIf="photoPreview" class="photo-preview">
-          <img [src]="photoPreview" alt="Photo Preview">
-          <button type="button" (click)="deletePhoto()" class="delete-photo-button">Delete</button>
+        <div class="photo-previews">
+          <div *ngFor="let photo of photoPreviews; let i = index" class="photo-preview">
+            <img [src]="photo" alt="Photo Preview">
+            <button type="button" (click)="deletePhoto(i)" class="delete-photo-button">x</button>
+          </div>
         </div>
         <label for="add-photo" class="add-photo-label">Add Photo</label>
-        <input type="file" id="add-photo" (change)="onFileSelected($event)" #images="ngModel" name="images" [(ngModel)]="pictureserv.formPicture.Images" class="add-photo-input">
+        <input type="file" id="add-photo" (change)="onFilesSelected($event)" multiple #images="ngModel" name="images" [(ngModel)]="pictureserv.formPicture.Images" class="add-photo-input">
       </div>
       <div class="location">
-        <label for="location">Location:</label>
-        <input type="text" #postLocation="ngModel" name="postLocation" [(ngModel)]="service.formMessage.postLocation" id="location">
+        <input type="text" placeholder="Location" #postLocation="ngModel" name="postLocation" [(ngModel)]="service.formMessage.postLocation" id="location">
       </div>
       <div class="add-tag">
-        <label for="tag">Add Tag:</label>
-        <input type="text" #postTag="ngModel" name="postTag" [(ngModel)]="service.formMessage.postTag" id="tag">
+        <input type="text" placeholder="Add Tag" #postTag="ngModel" name="postTag" [(ngModel)]="service.formMessage.postTag" id="tag">
       </div>
     </div>
     <div *ngIf="isExpanded" class="post-button-container">
@@ -77,24 +74,24 @@
   </div>
   <div class="post-content">
     <p>{{post.message}}</p>
-    <div *ngIf="post.photo" class="post-photo">
-      <img [src]="post.photo" alt="Post Photo">
+    <div *ngIf="post.photos && post.photos.length > 0" class="post-photo">
+      <img *ngFor="let photo of post.photos" [src]="photo" alt="Post Photo">
     </div>
+    <div class="post-tag">{{post.tag}}</div>
   </div>
   <div class="post-actions">
-    <button (click)="likePost(post)" class="like-button">❤️ {{post.likes}}</button>
-    <button (click)="toggleComments(post)" class="comment-button">💬 {{post.comments.length}}</button>
-    <button *ngIf="!post.adopted" (click)="adoptPet(post)" class="adopt-button">Adopt</button>
-    <button *ngIf="post.adopted" class="reserved-button">Reserved</button>
+    <button (click)="likePost(post)" class="like-button">Like ({{post.likes}})</button>
+    <button (click)="toggleComments(post)" class="comment-button">Comments ({{post.comments.length}})</button>
+    <button (click)="adoptPet(post)" *ngIf="!post.adopted" class="adopt-button">Adopt</button>
+    <span *ngIf="post.adopted" class="adopted-label">Adopted</span>
   </div>
-  <div *ngIf="post.showComments" class="post-comments">
+  <div class="post-comments" *ngIf="post.showComments">
     <div *ngFor="let comment of post.comments" class="comment">
-      <span class="comment-username">{{comment.username}}</span>
-      <span class="comment-text">{{comment.text}}</span>
+      <span class="comment-username">{{comment.username}}</span>: <span class="comment-text">{{comment.text}}</span>
     </div>
     <div class="add-comment">
-      <input type="text" placeholder="Add a comment..." [(ngModel)]="post.newComment">
-      <button (click)="addComment(post)">Post</button>
+      <input type="text" [(ngModel)]="post.newComment" placeholder="Add a comment">
+      <button (click)="addComment(post)">Comment</button>
     </div>
   </div>
 </div>

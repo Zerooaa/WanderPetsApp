@@ -14,19 +14,18 @@ import { PictureDetails } from '../share/picture-details.model';
 export class HomepageComponent {
   isExpanded: boolean = false;
   isPopupVisible: boolean = false;
-  selectedFile: File | null = null;
-  selectedFileName: string | null = null;
-  photoPreview: string | null = null;
-  posts: any[] = []; // Initialize an array to hold posts
-  filteredPosts: any[] = []; // Array to hold filtered posts
-  filterType: string | null = null; // Variable to hold the current filter type
+  selectedFiles: File[] = [];
+  photoPreviews: string[] = [];
+  posts: any[] = [];
+  filteredPosts: any[] = [];
+  filterType: string | null = null;
 
   constructor(private eRef: ElementRef,
-    private renderer: Renderer2,
-    public service: MessagesDetailsService,
-    private toastr: ToastrService,
-    private http: HttpClient,
-    public pictureserv: PictureDetailsService) { }
+              private renderer: Renderer2,
+              public service: MessagesDetailsService,
+              private toastr: ToastrService,
+              private http: HttpClient,
+              public pictureserv: PictureDetailsService) {}
 
   handleInput() {
     this.isExpanded = this.service.formMessage.postMessage.trim() !== '';
@@ -35,7 +34,6 @@ export class HomepageComponent {
   toggleFilterPopup() {
     this.isPopupVisible = !this.isPopupVisible;
   }
-  
 
   @HostListener('document:click', ['$event'])
   onClick(event: Event) {
@@ -44,47 +42,32 @@ export class HomepageComponent {
     }
   }
 
-  onFileSelected(event: any) {
+  onFilesSelected(event: any) {
     if (event.target.files.length > 0) {
-      this.selectedFile = event.target.files[0];
-      this.selectedFileName = this.selectedFile ? this.selectedFile.name : null;
-
-      // Generate a preview of the selected image
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.photoPreview = e.target.result;
-      };
-      if (this.selectedFile) {
-        reader.readAsDataURL(this.selectedFile);
+      for (let file of event.target.files) {
+        this.selectedFiles.push(file);
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.photoPreviews.push(e.target.result);
+        };
+        reader.readAsDataURL(file);
       }
     }
   }
 
-  deletePhoto() {
-    this.selectedFile = null;
-    this.selectedFileName = null;
-    this.photoPreview = null;
-    // Reset the file input field
-    const fileInput = this.eRef.nativeElement.querySelector('#add-photo');
-    if (fileInput) {
-      fileInput.value = '';
-    }
+  deletePhoto(index: number) {
+    this.selectedFiles.splice(index, 1);
+    this.photoPreviews.splice(index, 1);
   }
 
   onSubmit(form: NgForm) {
     if (form.valid) {
-      if (this.selectedFile) {
-        const pictureDetails = new PictureDetails();
-        pictureDetails.Images = this.selectedFile;
-
-        this.pictureserv.uploadImage(pictureDetails).subscribe({
-          next: res => {
-            this.submitForm(form);
-          },
-          error: err => {
-            console.log(err);
-            this.toastr.error('Failed to upload image', 'Image Upload');
-          }
+      if (this.selectedFiles.length > 0) {
+        this.uploadPhotos().then(() => {
+          this.submitForm(form);
+        }).catch(err => {
+          console.log(err);
+          this.toastr.error('Failed to upload images', 'Image Upload');
         });
       } else {
         this.submitForm(form);
@@ -92,13 +75,22 @@ export class HomepageComponent {
     }
   }
 
+  async uploadPhotos() {
+    const uploadPromises = this.selectedFiles.map(file => {
+      const pictureDetails = new PictureDetails();
+      pictureDetails.Images = file;
+      return this.pictureserv.uploadImage(pictureDetails).toPromise();
+    });
+    await Promise.all(uploadPromises);
+  }
+
   submitForm(form: NgForm) {
     this.service.postRegisterDetails().subscribe({
       next: res => {
-        console.log(res);
-        this.addPost(res); // Add the post to the posts array
+        this.addPost(res);
         this.service.resetForm(form);
         this.toastr.success('Submitted successfully', 'Post Details');
+        this.resetPhotos();
       },
       error: err => {
         console.log(err);
@@ -110,17 +102,17 @@ export class HomepageComponent {
   addPost(post: any) {
     const newPost = {
       id: post.id,
-      userProfilePic: 'path_to_profile_pic', // Replace with actual profile pic path
-      username: 'User Name', // Replace with actual username
+      userProfilePic: 'path_to_profile_pic',
+      username: 'User Name',
       date: new Date(),
       message: post.message,
-      photo: this.photoPreview,
+      photos: [...this.photoPreviews],
       likes: 0,
       comments: [],
       adopted: false,
       showComments: false,
       newComment: '',
-      tag: post.tag // Assuming the tag is part of the post details
+      tag: post.tag
     };
     this.posts.unshift(newPost);
     this.applyFilter();
@@ -137,7 +129,7 @@ export class HomepageComponent {
   addComment(post: any) {
     if (post.newComment.trim() !== '') {
       post.comments.push({
-        username: 'Current User', // Replace with actual current user
+        username: 'Current User',
         text: post.newComment.trim()
       });
       post.newComment = '';
@@ -159,5 +151,10 @@ export class HomepageComponent {
     } else {
       this.filteredPosts = this.posts;
     }
+  }
+
+  resetPhotos() {
+    this.selectedFiles = [];
+    this.photoPreviews = [];
   }
 }

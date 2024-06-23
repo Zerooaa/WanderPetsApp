@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-profile',
@@ -16,34 +15,19 @@ export class ProfileComponent implements OnInit {
   loggedinUserContactNo: string = '';
   loggedinUserQuote: string = '';
   profilePictureUrl: string | undefined;
+  defaultProfilePictureUrl: string = 'public/pets.png';  // Path to your default profile picture
 
   originalProfileData: any = {};
   isEditing: boolean = false;
+  isPicturePopupVisible: boolean = false;
+  newProfilePictureUrl: string | ArrayBuffer | null = null;
+  selectedFile: File | null = null;
 
   @ViewChild('fileInput') fileInput!: ElementRef;
-
-  triggerFileInput() {
-    this.fileInput.nativeElement.click();
-  }
-
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      const formData = new FormData();
-      formData.append('profilePicture', file);
-
-      this.http.post('/api/profile-picture', formData).subscribe((response: any) => {
-        this.profilePictureUrl = response.profilePictureUrl;
-      }, error => {
-        console.error('Error uploading profile picture', error);
-      });
-    }
-  }
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    // Fetch initial profile data
     this.fetchProfile();
   }
 
@@ -56,7 +40,7 @@ export class ProfileComponent implements OnInit {
       this.loggedinUserEmail = data.loggedinUserEmail;
       this.loggedinUserContactNo = data.loggedinUserContactNo;
       this.loggedinUserQuote = data.loggedinUserQuote;
-      this.profilePictureUrl = data.profilePictureUrl;
+      this.profilePictureUrl = data.profilePictureUrl || this.defaultProfilePictureUrl;
 
       this.storeOriginalProfileData();
     });
@@ -75,44 +59,79 @@ export class ProfileComponent implements OnInit {
     };
   }
 
-  editProfile() {
-    this.isEditing = true;
+  triggerFileInput() {
+    this.fileInput.nativeElement.click();
+  }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.newProfilePictureUrl = e.target.result
+        ;
+        this.selectedFile = file;
+        this.isPicturePopupVisible = true;
+         };
+      reader.readAsDataURL(file);
+      }
+    }
+
+  saveNewProfilePicture() {
+    if (this.selectedFile) {
+      const formData = new FormData();
+      formData.append('profilePicture', this.selectedFile);
+
+      this.http.post('/api/profile-picture', formData).subscribe((response: any) => {
+        this.profilePictureUrl = response.profilePictureUrl;
+        this.isPicturePopupVisible = false;
+      }, error => {
+        console.error('Error uploading profile picture', error);
+        this.isPicturePopupVisible = false;
+      });
+    }
+  }
+
+  cancelNewProfilePicture() {
+    this.newProfilePictureUrl = null;
+    this.selectedFile = null;
+    this.isPicturePopupVisible = false;
   }
 
   saveProfile() {
     const profileData = {
-      loggedinUser: this.loggedinUser,
-      loggedinUserName: this.loggedinUserName,
-      loggedinUserRole: this.loggedinUserRole,
-      loggedinUserAddress: this.loggedinUserAddress,
-      loggedinUserEmail: this.loggedinUserEmail,
-      loggedinUserContactNo: this.loggedinUserContactNo,
-      loggedinUserQuote: this.loggedinUserQuote,
-      profilePictureUrl: this.profilePictureUrl
-    };
+    loggedinUser: this.loggedinUser,
+    loggedinUserName: this.loggedinUserName,
+    loggedinUserRole: this.loggedinUserRole,
+    loggedinUserAddress: this.loggedinUserAddress,
+    loggedinUserEmail: this.loggedinUserEmail,
+    loggedinUserContactNo: this.loggedinUserContactNo,
+    loggedinUserQuote: this.loggedinUserQuote,
+    profilePictureUrl: this.profilePictureUrl
+  };
 
-    this.http.post('/api/profile', profileData).subscribe(response => {
-      console.log('Profile saved', response);
-      this.storeOriginalProfileData();
-      this.isEditing = false;
-    }, error => {
-      console.error('Error saving profile', error);
-    });
-  }
+  this.http.post('/api/profile', profileData).subscribe(response => {
+    console.log('Profile saved', response);
+    this.storeOriginalProfileData();
+    this.isEditing = false;
+      }, error => {
+        console.error('Error saving profile', error);
+      });
+    }
 
   cancelEdit() {
-    this.isEditing = false;
-    this.resetProfileData();
+  this.isEditing = false;
+  this.resetProfileData();
   }
 
   resetProfileData() {
-    this.loggedinUser = this.originalProfileData.loggedinUser;
-    this.loggedinUserName = this.originalProfileData.loggedinUserName;
-    this.loggedinUserRole = this.originalProfileData.loggedinUserRole;
-    this.loggedinUserAddress = this.originalProfileData.loggedinUserAddress;
-    this.loggedinUserEmail = this.originalProfileData.loggedinUserEmail;
-    this.loggedinUserContactNo = this.originalProfileData.loggedinUserContactNo;
-    this.loggedinUserQuote = this.originalProfileData.loggedinUserQuote;
-    this.profilePictureUrl = this.originalProfileData.profilePictureUrl;
+  this.loggedinUser = this.originalProfileData.loggedinUser;
+  this.loggedinUserName = this.originalProfileData.loggedinUserName;
+  this.loggedinUserRole = this.originalProfileData.loggedinUserRole;
+  this.loggedinUserAddress = this.originalProfileData.loggedinUserAddress;
+  this.loggedinUserEmail = this.originalProfileData.loggedinUserEmail;
+  this.loggedinUserContactNo = this.originalProfileData.loggedinUserContactNo;
+  this.loggedinUserQuote = this.originalProfileData.loggedinUserQuote;
+  this.profilePictureUrl = this.originalProfileData.profilePictureUrl;
   }
 }

@@ -8,13 +8,13 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     color: #8B4513;
 }
-  
+
 .profile-header {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-  
+
 .profile-picture {
     border-radius: 50%;
     width: 300px;
@@ -32,21 +32,20 @@
     border-radius: 5px;
     cursor: pointer;
 }
-  
+
 .change-picture-button:hover {
     background-color: #8B4513;
 }
-  
-  
+
 .profile-info {
     text-align: center;
 }
-  
+
 .profile-name {
     font-size: 30px;
     margin: 10px 0 5px 0;
 }
-  
+
 .profile-username, .profile-role, .profile-quote {
     display: flex;
     flex-direction: column;
@@ -73,7 +72,6 @@
 h1 {
     color: #CD6301;
 }
-
 
 .form-control {
     display: block;
@@ -140,7 +138,7 @@ h1 {
     color: white;
     cursor: pointer;
 }
-  
+
 .cancel-button {
     padding: 10px 20px;
     margin: 5px;
@@ -149,4 +147,38 @@ h1 {
     background-color: #f44336;
     color: white;
     cursor: pointer;
+}
+
+.picture-popup-container {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.picture-popup-content {
+    background-color: #FFF3D4;
+    color: #8B4513;
+    padding: 20px;
+    border: 1px solid #8B4513;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+  
+.new-profile-picture-preview {
+    border-radius: 50%;
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    margin-bottom: 20px;
 }

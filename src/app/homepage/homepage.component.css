@@ -53,6 +53,7 @@
 
 .form-controls {
   display: flex;
+  flex-direction: column;
   width: 80%;
   justify-content: space-evenly;
   align-items: center;
@@ -70,37 +71,41 @@
   display: none;
 }
 
-.photo-indication {
-  color: #8B4513;
-  margin-top: 10px;
+.photo-previews {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.photo-preview {
+  position: relative;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .photo-preview img {
-  max-width: 100px;
-  max-height: 100px;
-  margin-top: 10px;
-  border-radius: 5px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
 }
 
 .delete-photo-button {
   position: absolute;
-  bottom: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #e74c3c;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
-  padding: 5px 10px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
-  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .delete-photo-button:hover {
-  background-color: #c0392b;
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .add-photo-label {
@@ -128,12 +133,12 @@
   align-items: center;
 }
 
-.location label, .add-tag label {
-  margin-right: 20px;
+.location::placeholder, .add-tag::placeholder {
   color: #8B4513;
 }
 
 .location input, .add-tag input {
+  margin-top: 30px;
   border: 1px solid #8B4513;
   border-radius: 30px;
   padding: 10px;
