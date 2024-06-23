@@ -109,10 +109,15 @@ export class HomepageComponent {
       photos: [...this.photoPreviews],
       likes: 0,
       comments: [],
+      reserved: false,
       adopted: false,
       showComments: false,
+      showMenu: false,
+      isEditing: false,
       newComment: '',
-      tag: post.tag
+      tag: post.tag,
+      editMessage: post.message,
+      editTag: post.tag
     };
     this.posts.unshift(newPost);
     this.applyFilter();
@@ -156,5 +161,36 @@ export class HomepageComponent {
   resetPhotos() {
     this.selectedFiles = [];
     this.photoPreviews = [];
+  }
+
+  togglePostMenu(post: any) {
+    post.showMenu = !post.showMenu;
+  }
+
+  markAsReserved(post: any) {
+    post.reserved = true;
+    post.showMenu = false;
+  }
+
+  markAsAdopted(post: any) {
+    post.adopted = true;
+    post.showMenu = false;
+  }
+
+  startEditingPost(post: any) {
+    post.isEditing = true;
+    post.showMenu = false;
+  }
+
+  saveEdit(post: any) {
+    post.message = post.editMessage;
+    post.tag = post.editTag;
+    post.isEditing = false;
+  }
+
+  cancelEdit(post: any) {
+    post.editMessage = post.message;
+    post.editTag = post.tag;
+    post.isEditing = false;
   }
 }

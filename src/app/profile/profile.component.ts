@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  // Profile data
   loggedinUser: string = '';
   loggedinUserName: string = '';
   loggedinUserRole: string = '';
@@ -15,7 +16,10 @@ export class ProfileComponent implements OnInit {
   loggedinUserContactNo: string = '';
   loggedinUserQuote: string = '';
   profilePictureUrl: string | undefined;
-  defaultProfilePictureUrl: string = 'public/pets.png';  // Path to your default profile picture
+  defaultProfilePictureUrl: string = 'public/pets.png';
+
+  // Pet Listings
+  petListings: any[] = [];
 
   originalProfileData: any = {};
   isEditing: boolean = false;
@@ -25,10 +29,11 @@ export class ProfileComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput!: ElementRef;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.fetchProfile();
+    this.fetchPetListings();
   }
 
   fetchProfile() {
@@ -43,6 +48,12 @@ export class ProfileComponent implements OnInit {
       this.profilePictureUrl = data.profilePictureUrl || this.defaultProfilePictureUrl;
 
       this.storeOriginalProfileData();
+    });
+  }
+
+  fetchPetListings() {
+    this.http.get<any[]>('/api/pet-listings').subscribe((data: any[]) => {
+      this.petListings = data;
     });
   }
 
@@ -68,14 +79,13 @@ export class ProfileComponent implements OnInit {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.newProfilePictureUrl = e.target.result
-        ;
+        this.newProfilePictureUrl = e.target.result;
         this.selectedFile = file;
         this.isPicturePopupVisible = true;
-         };
+      };
       reader.readAsDataURL(file);
-      }
     }
+  }
 
   saveNewProfilePicture() {
     if (this.selectedFile) {
@@ -100,38 +110,57 @@ export class ProfileComponent implements OnInit {
 
   saveProfile() {
     const profileData = {
-    loggedinUser: this.loggedinUser,
-    loggedinUserName: this.loggedinUserName,
-    loggedinUserRole: this.loggedinUserRole,
-    loggedinUserAddress: this.loggedinUserAddress,
-    loggedinUserEmail: this.loggedinUserEmail,
-    loggedinUserContactNo: this.loggedinUserContactNo,
-    loggedinUserQuote: this.loggedinUserQuote,
-    profilePictureUrl: this.profilePictureUrl
-  };
+      loggedinUser: this.loggedinUser,
+      loggedinUserName: this.loggedinUserName,
+      loggedinUserRole: this.loggedinUserRole,
+      loggedinUserAddress: this.loggedinUserAddress,
+      loggedinUserEmail: this.loggedinUserEmail,
+      loggedinUserContactNo: this.loggedinUserContactNo,
+      loggedinUserQuote: this.loggedinUserQuote,
+      profilePictureUrl: this.profilePictureUrl
+    };
 
-  this.http.post('/api/profile', profileData).subscribe(response => {
-    console.log('Profile saved', response);
-    this.storeOriginalProfileData();
-    this.isEditing = false;
-      }, error => {
-        console.error('Error saving profile', error);
-      });
-    }
+    this.http.post('/api/profile', profileData).subscribe(response => {
+      console.log('Profile saved', response);
+      this.storeOriginalProfileData();
+      this.isEditing = false;
+    }, error => {
+      console.error('Error saving profile', error);
+    });
+  }
 
   cancelEdit() {
-  this.isEditing = false;
-  this.resetProfileData();
+    this.isEditing = false;
+    this.resetProfileData();
   }
 
   resetProfileData() {
-  this.loggedinUser = this.originalProfileData.loggedinUser;
-  this.loggedinUserName = this.originalProfileData.loggedinUserName;
-  this.loggedinUserRole = this.originalProfileData.loggedinUserRole;
-  this.loggedinUserAddress = this.originalProfileData.loggedinUserAddress;
-  this.loggedinUserEmail = this.originalProfileData.loggedinUserEmail;
-  this.loggedinUserContactNo = this.originalProfileData.loggedinUserContactNo;
-  this.loggedinUserQuote = this.originalProfileData.loggedinUserQuote;
-  this.profilePictureUrl = this.originalProfileData.profilePictureUrl;
+    this.loggedinUser = this.originalProfileData.loggedinUser;
+    this.loggedinUserName = this.originalProfileData.loggedinUserName;
+    this.loggedinUserRole = this.originalProfileData.loggedinUserRole;
+    this.loggedinUserAddress = this.originalProfileData.loggedinUserAddress;
+    this.loggedinUserEmail = this.originalProfileData.loggedinUserEmail;
+    this.loggedinUserContactNo = this.originalProfileData.loggedinUserContactNo;
+    this.loggedinUserQuote = this.originalProfileData.loggedinUserQuote;
+    this.profilePictureUrl = this.originalProfileData.profilePictureUrl;
+  }
+
+  // Pet listing functions
+  adoptPet(pet: any) {
+    pet.status = 'Reserved';
+    this.http.post('/api/update-pet-status', { id: pet.id, status: 'Reserved' }).subscribe(response => {
+      console.log('Pet status updated to Reserved', response);
+    }, error => {
+      console.error('Error updating pet status', error);
+    });
+  }
+
+  markAsAdopted(pet: any) {
+    pet.status = 'Adopted';
+    this.http.post('/api/update-pet-status', { id: pet.id, status: 'Adopted' }).subscribe(response => {
+      console.log('Pet status updated to Adopted', response);
+    }, error => {
+      console.error('Error updating pet status', error);
+    });
   }
 }

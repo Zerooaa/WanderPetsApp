@@ -182,3 +182,58 @@ h1 {
     object-fit: cover;
     margin-bottom: 20px;
 }
+
+.petlisting-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+  
+.pet-card {
+    background-color: #FFF3D4;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 200px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #8B4513;
+}
+  
+.pet-image {
+    border-radius: 10px;
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+  
+.pet-info {
+    text-align: center;
+}
+  
+.pet-info h2 {
+    font-size: 20px;
+    margin: 10px 0;
+}
+  
+.pet-info p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+  
+.pet-info button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+}
+  
+.pet-info button:hover {
+    background-color: #45a049;
+}
+  
