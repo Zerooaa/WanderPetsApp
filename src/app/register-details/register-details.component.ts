@@ -20,11 +20,11 @@ export class RegisterDetailsComponent implements OnInit {
   ngOnInit() { }
 
   onSubmit(form: NgForm) {
-    if (this.service.formData.userName && 
-        this.service.formData.fullName && 
-        this.service.formData.userEmail && 
-        this.service.formData.userPhone && 
-        this.service.formData.userPassword && 
+    if (this.service.formData.userName &&
+        this.service.formData.fullName &&
+        this.service.formData.userEmail &&
+        this.service.formData.userPhone &&
+        this.service.formData.userPassword &&
         this.confirmPasswordValue === this.service.formData.userPassword &&
         form.valid) {
         this.service.postRegisterDetails().subscribe({

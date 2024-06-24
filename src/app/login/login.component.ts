@@ -11,16 +11,17 @@ import { NavbarService } from '../services/navbar-service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-
 export class LoginComponent implements OnInit, OnDestroy {
   loginObj: Login;
 
-  constructor(public service: RegisterDetailsService,
-              private authService: AuthService,
-              private toastr: ToastrService,
-              private http: HttpClient,
-              private router: Router,
-              private navbarService: NavbarService) {
+  constructor(
+    public service: RegisterDetailsService,
+    private authService: AuthService,
+    private toastr: ToastrService,
+    private http: HttpClient,
+    private router: Router,
+    private navbarService: NavbarService
+  ) {
     this.loginObj = new Login();
   }
 
@@ -36,6 +37,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         // If there's a 'user' property in the response, login is successful
         this.toastr.success('Login Successful', 'Login');
         this.navbarService.display(); // Show the navbar upon successful login
+
+        // Store userID in local storage or session storage
+        localStorage.setItem('userID', res.user.userID);
+
         this.router.navigate(['/homePage']);
         console.log(res);
       } else {

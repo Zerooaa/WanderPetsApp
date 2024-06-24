@@ -37,10 +37,10 @@
         </div>
         <div class="input-box">
           <span class="details">Phone Number</span>
-          <input type="tel" #userPhone="ngModel" name="userPhone" [(ngModel)]="service.formData.userPhone" placeholder="Enter Your Phone Number" required pattern="^[0-9]{11}$">
+          <input type="tel" #userPhone="ngModel" name="userPhone" [(ngModel)]="service.formData.userPhone" placeholder="Enter Your Phone Number" required pattern="^[0-9]{10}$">
           <div *ngIf="userPhone.invalid && (userPhone.dirty || userPhone.touched)" class="error">
             <div *ngIf="userPhone.errors?.['required']">Phone Number is required.</div>
-            <div *ngIf="userPhone.errors?.['pattern']">Phone Number must be 11 digits.</div>
+            <div *ngIf="userPhone.errors?.['pattern']">Phone Number must be 10 digits.</div>
           </div>
         </div>
         <div class="input-box">

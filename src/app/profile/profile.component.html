@@ -1,21 +1,20 @@
 <div class="profile-container">
-    <div class="profile-header">
-      <button class="edit-button" (click)="isEditing = true"><img src="/edit.png"></button>
-      <img [src]="profilePictureUrl" alt="Profile Picture" class="profile-picture">
-      <button class="change-picture-button" (click)="triggerFileInput()">Change Picture</button>
-      <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)">
-      <div class="profile-info">
-        <h2 class="profile-name">{{ loggedinUser }}</h2>
-        <p class="profile-username">{{ loggedinUserName }}</p>
-        <p class="profile-role">{{ loggedinUserRole }}</p>
-        <p class="profile-address">Address: {{ loggedinUserAddress }}</p>
-        <p class="profile-email">Email: {{ loggedinUserEmail }}</p>
-        <p class="profile-contact">Contact No: {{ loggedinUserContactNo }}</p>
-        <span class="profile-quote">"{{ loggedinUserQuote }}"</span>
-      </div>
+  <div class="profile-header">
+    <button class="edit-button" (click)="isEditing = true">
+      <img src="/edit.png" alt="Edit">
+    </button>
+    <img [src]="profileData.profilePictureUrl" alt="Profile Picture" class="profile-picture">
+    <button class="change-picture-button" (click)="triggerFileInput()">Change Picture</button>
+    <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)">
+    <div class="profile-info">
+      <h2 class="profile-name">{{ profileData.fullName }}</h2>
+      <p class="profile-username">{{ profileData.userName }}</p>
+      <p class="profile-email">Email: {{ profileData.userEmail }}</p>
+      <p class="profile-contact">Contact No: {{ profileData.userPhone }}</p>
     </div>
   </div>
-  
+</div>
+
   <div class="petlisting-container">
     <h1>PET LISTINGS</h1>
     <div *ngFor="let pet of petListings" class="pet-card">
@@ -28,17 +27,14 @@
       </div>
     </div>
   </div>
-  
+
   <div *ngIf="isEditing" class="editing-container">
     <div class="editing-content">
       <form class="profile-info">
-        <input type="text" [(ngModel)]="loggedinUser" placeholder="Name" required class="form-control" />
-        <input type="text" [(ngModel)]="loggedinUserName" placeholder="Username" required class="form-control" />
-        <input type="text" [(ngModel)]="loggedinUserRole" placeholder="Role" required class="form-control" />
-        <input type="text" [(ngModel)]="loggedinUserAddress" placeholder="Address" required class="form-control" />
-        <input type="email" [(ngModel)]="loggedinUserEmail" placeholder="Email" required class="form-control" />
-        <input type="text" [(ngModel)]="loggedinUserContactNo" placeholder="Contact No" required class="form-control" />
-        <input type="text" [(ngModel)]="loggedinUserQuote" placeholder="Quote" required class="form-control" />
+        <input type="text"  placeholder="Full Name" required class="form-control" />
+        <input type="text" placeholder="Username" required class="form-control" />
+        <input type="email"  placeholder="Email" required class="form-control" />
+        <input type="text"  placeholder="Contact No" required class="form-control" />
         <div class="button-container">
           <button class="save-button" (click)="saveProfile()">Save</button>
           <button class="cancel-button" (click)="cancelEdit()">Cancel</button>
@@ -46,7 +42,7 @@
       </form>
     </div>
   </div>
-  
+
   <div *ngIf="isPicturePopupVisible" class="picture-popup-container">
     <div class="picture-popup-content">
       <h2>New Profile Picture</h2>
@@ -57,4 +53,3 @@
       </div>
     </div>
   </div>
-  

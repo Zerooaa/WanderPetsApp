@@ -1,5 +1,11 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ProfileDetails } from '../share/profile-details.model';
+import { ProfileDetailsService } from '../share/profile-details.service';
+import { RegisterDetailsService } from '../share/register-details.service'; // Import RegisterDetailsService
+import { ToastrService } from 'ngx-toastr';
+import { RegisterDetails } from '../share/register-details.model';
+
 
 @Component({
   selector: 'app-profile',
@@ -7,67 +13,84 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  // Profile data
-  loggedinUser: string = '';
-  loggedinUserName: string = '';
-  loggedinUserRole: string = '';
-  loggedinUserAddress: string = '';
-  loggedinUserEmail: string = '';
-  loggedinUserContactNo: string = '';
-  loggedinUserQuote: string = '';
-  profilePictureUrl: string | undefined;
-  defaultProfilePictureUrl: string = 'public/pets.png';
+  profileData: ProfileDetails = new ProfileDetails();
+  defaultProfilePictureUrl: string = 'https://github.com/Zerooaa/WanderPetsApp/blob/master/public/pets.png?raw=true';
 
-  // Pet Listings
-  petListings: any[] = [];
-
-  originalProfileData: any = {};
   isEditing: boolean = false;
   isPicturePopupVisible: boolean = false;
   newProfilePictureUrl: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
+  currentProfilePictureUrl: string = ''; // Added property to store current profile picture URL
+  petListings: any;
 
   @ViewChild('fileInput') fileInput!: ElementRef;
 
-  constructor(private http: HttpClient) {}
+
+  constructor(
+    private http: HttpClient,
+    private profileDetailsService: ProfileDetailsService,
+    private registerDetailsService: RegisterDetailsService, // Inject RegisterDetailsService
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
-    this.fetchProfile();
-    this.fetchPetListings();
+    this.fetchProfileData();
   }
 
-  fetchProfile() {
-    this.http.get('/api/profile').subscribe((data: any) => {
-      this.loggedinUser = data.loggedinUser;
-      this.loggedinUserName = data.loggedinUserName;
-      this.loggedinUserRole = data.loggedinUserRole;
-      this.loggedinUserAddress = data.loggedinUserAddress;
-      this.loggedinUserEmail = data.loggedinUserEmail;
-      this.loggedinUserContactNo = data.loggedinUserContactNo;
-      this.loggedinUserQuote = data.loggedinUserQuote;
-      this.profilePictureUrl = data.profilePictureUrl || this.defaultProfilePictureUrl;
+  fetchProfileData() {
+    const userIDString = localStorage.getItem('userID');
+    if (!userIDString) {
+      console.error('User ID not found in local storage');
+      return;
+    }
 
-      this.storeOriginalProfileData();
-    });
-  }
+    const userID = parseInt(userIDString, 10); // Using radix 10
+    if (isNaN(userID)) {
+      console.error('Invalid user ID in local storage');
+      return;
+    }
 
-  fetchPetListings() {
-    this.http.get<any[]>('/api/pet-listings').subscribe((data: any[]) => {
-      this.petListings = data;
-    });
-  }
+    // Assuming you have a method in RegisterDetailsService to fetch user details by userID
+    this.registerDetailsService.getRegisterDetails(userID).subscribe(
+      (userData: any) => {
+        // Use userData to populate profileData
+        this.profileData.userName = userData.userName;
+        this.profileData.fullName = userData.fullName;
+        this.profileData.userEmail = userData.userEmail;
+        this.profileData.userPhone = userData.userPhone;
 
-  storeOriginalProfileData() {
-    this.originalProfileData = {
-      loggedinUser: this.loggedinUser,
-      loggedinUserName: this.loggedinUserName,
-      loggedinUserRole: this.loggedinUserRole,
-      loggedinUserAddress: this.loggedinUserAddress,
-      loggedinUserEmail: this.loggedinUserEmail,
-      loggedinUserContactNo: this.loggedinUserContactNo,
-      loggedinUserQuote: this.loggedinUserQuote,
-      profilePictureUrl: this.profilePictureUrl
-    };
+        // Optionally, you can set other profileData properties if available in RegisterDetails
+        // this.profileData.someOtherProperty = userData.someOtherProperty;
+
+        // Now fetch profile details using userID
+        this.profileDetailsService.getProfileDetails(userID).subscribe(
+          (profileData: ProfileDetails) => {
+            this.profileData = profileData;
+            console.log('Fetched profile data:', this.profileData);
+            if (this.profileData.ProfilePic) {
+              this.profileData.profilePictureUrl = `data:image/jpeg;base64,${this.profileData.ProfilePic}`;
+            } else {
+              this.profileData.profilePictureUrl = this.defaultProfilePictureUrl;
+            }
+            this.currentProfilePictureUrl = this.profileData.profilePictureUrl; // Store initial profile picture URL
+            console.log('Profile picture URL set to:', this.profileData.profilePictureUrl);
+
+            // Optionally, check if there's a stored profile picture URL in local storage
+            // this.loadStoredProfilePicture();
+          },
+          error => {
+            console.error('Error fetching profile data', error);
+            // Handle error fetching profile data
+            this.toastr.error('Error fetching profile data', 'Profile');
+          }
+        );
+      },
+      (      error: any) => {
+        console.error('Error fetching user data', error);
+        // Handle error fetching user data
+        this.toastr.error('Error fetching user data', 'Profile');
+      }
+    );
   }
 
   triggerFileInput() {
@@ -77,6 +100,7 @@ export class ProfileComponent implements OnInit {
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
+      this.currentProfilePictureUrl = this.profileData.profilePictureUrl; // Store current profile picture URL
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.newProfilePictureUrl = e.target.result;
@@ -89,16 +113,24 @@ export class ProfileComponent implements OnInit {
 
   saveNewProfilePicture() {
     if (this.selectedFile) {
-      const formData = new FormData();
-      formData.append('profilePicture', this.selectedFile);
-
-      this.http.post('/api/profile-picture', formData).subscribe((response: any) => {
-        this.profilePictureUrl = response.profilePictureUrl;
-        this.isPicturePopupVisible = false;
-      }, error => {
-        console.error('Error uploading profile picture', error);
-        this.isPicturePopupVisible = false;
-      });
+      this.profileDetailsService.uploadImage({ ProfilePicture: this.selectedFile }).subscribe(
+        (response: { profilePic: string; }) => {
+          if (response.profilePic) {
+            const userId = this.profileData.userId; // Assuming userId is available in profileData
+            localStorage.setItem(`profilePictureUrl_${userId}`, `data:image/jpeg;base64,${response.profilePic}`);
+            this.profileData.profilePictureUrl = `data:image/jpeg;base64,${response.profilePic}`;
+          }
+          this.isPicturePopupVisible = false;
+          this.newProfilePictureUrl = null;
+          console.log('Profile Picture Uploaded Successfully', response);
+          console.log('Updated profile picture URL:', this.profileData.profilePictureUrl);
+          this.selectedFile = null;
+        },
+        error => {
+          console.error('Error Uploading Profile Picture', error);
+          this.isPicturePopupVisible = false;
+        }
+      );
     }
   }
 
@@ -106,27 +138,20 @@ export class ProfileComponent implements OnInit {
     this.newProfilePictureUrl = null;
     this.selectedFile = null;
     this.isPicturePopupVisible = false;
+    this.profileData.profilePictureUrl = this.currentProfilePictureUrl; // Revert to current profile picture URL
+  }
+
+  loadStoredProfilePicture() {
+    const userId = this.profileData.userId; // Assuming userId is available in profileData
+    const storedProfilePictureUrl = localStorage.getItem(`profilePictureUrl_${userId}`);
+    console.log('Stored profile picture URL:', storedProfilePictureUrl); // Log to check the retrieved URL
+    if (storedProfilePictureUrl) {
+      this.profileData.profilePictureUrl = storedProfilePictureUrl;
+    }
   }
 
   saveProfile() {
-    const profileData = {
-      loggedinUser: this.loggedinUser,
-      loggedinUserName: this.loggedinUserName,
-      loggedinUserRole: this.loggedinUserRole,
-      loggedinUserAddress: this.loggedinUserAddress,
-      loggedinUserEmail: this.loggedinUserEmail,
-      loggedinUserContactNo: this.loggedinUserContactNo,
-      loggedinUserQuote: this.loggedinUserQuote,
-      profilePictureUrl: this.profilePictureUrl
-    };
-
-    this.http.post('/api/profile', profileData).subscribe(response => {
-      console.log('Profile saved', response);
-      this.storeOriginalProfileData();
-      this.isEditing = false;
-    }, error => {
-      console.error('Error saving profile', error);
-    });
+    // Implement saveProfile logic here
   }
 
   cancelEdit() {
@@ -135,32 +160,30 @@ export class ProfileComponent implements OnInit {
   }
 
   resetProfileData() {
-    this.loggedinUser = this.originalProfileData.loggedinUser;
-    this.loggedinUserName = this.originalProfileData.loggedinUserName;
-    this.loggedinUserRole = this.originalProfileData.loggedinUserRole;
-    this.loggedinUserAddress = this.originalProfileData.loggedinUserAddress;
-    this.loggedinUserEmail = this.originalProfileData.loggedinUserEmail;
-    this.loggedinUserContactNo = this.originalProfileData.loggedinUserContactNo;
-    this.loggedinUserQuote = this.originalProfileData.loggedinUserQuote;
-    this.profilePictureUrl = this.originalProfileData.profilePictureUrl;
+    // Implement resetProfileData logic here
   }
 
-  // Pet listing functions
   adoptPet(pet: any) {
     pet.status = 'Reserved';
-    this.http.post('/api/update-pet-status', { id: pet.id, status: 'Reserved' }).subscribe(response => {
-      console.log('Pet status updated to Reserved', response);
-    }, error => {
-      console.error('Error updating pet status', error);
-    });
+    this.http.post('/api/update-pet-status', { id: pet.id, status: 'Reserved' }).subscribe(
+      response => {
+        console.log('Pet status updated to Reserved', response);
+      },
+      error => {
+        console.error('Error updating pet status', error);
+      }
+    );
   }
 
   markAsAdopted(pet: any) {
     pet.status = 'Adopted';
-    this.http.post('/api/update-pet-status', { id: pet.id, status: 'Adopted' }).subscribe(response => {
-      console.log('Pet status updated to Adopted', response);
-    }, error => {
-      console.error('Error updating pet status', error);
-    });
+    this.http.post('/api/update-pet-status', { id: pet.id, status: 'Adopted' }).subscribe(
+      response => {
+        console.log('Pet status updated to Adopted', response);
+      },
+      error => {
+        console.error('Error updating pet status', error);
+      }
+    );
   }
 }
