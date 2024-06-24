@@ -11,24 +11,21 @@
   <nav>
     <ul class="left-items">
       <li *ngIf="!showNavbar"><a href="/landingPage" class="logo-hover" routerLinkActive="active"><img src="/Logo3.png" class="logo">WanderPets</a></li>
-
       <li *ngIf="showNavbar"><a href="/messagePage" class="message" routerLinkActive="active"><img src="/message.png" class="message1"></a></li>
     </ul>
 
     <ul class="center-items">
-      <li *ngIf="showNavbar"class="title"><a class="title-hover">WanderPets</a></li>
+      <li *ngIf="showNavbar" class="title"><a class="title-hover">WanderPets</a></li>
     </ul>
-
+    
     <ul class="right-items">
       <li *ngIf="!showNavbar"><a routerLink="/aboutPage" routerLinkActive="active">About</a></li>
       <li *ngIf="!showNavbar"><a routerLink="/contactPage" routerLinkActive="active">Contact</a></li>
       <li *ngIf="!showNavbar"><a routerLink="/registerPage" routerLinkActive="active">Register</a></li>
       <li *ngIf="!showNavbar"><a routerLink="/loginPage" routerLinkActive="active">Login</a></li>
-
-      <li *ngIf="showNavbar" class="dropdown" dropdown>
-        <a href="#" class="dropdown-toggle" dropdownToggle (click)="false">Welcome {{ loggedinUser }}</a>
+      <li *ngIf="showNavbar" class="dropdown" dropdown><a href="#" class="dropdown-toggle" dropdownToggle (click)="false">Welcome {{ loggedinUser }}</a>
         <div class="dropdown-menu custom-dropdown-menu" *dropdownMenu>
-          <a href="/profilePage" class="dropdown-item"><i class="fas fa-tachometer-alt"></i>Profile</a>
+          <a routerLink ="['/profilePage', loggedinUser]" class="dropdown-item"><i class="fas fa-tachometer-alt"></i>Profile</a>
           <a *ngIf="showNavbar" (click)="isChanging = !isChanging" class="dropdown-item"><i class="fas fa-user-circle"></i>Settings</a>
           <a *ngIf="showNavbar" (click)="onLogout()" href="/loginPage" class="dropdown-item"><i class="fas fa-sign-out-alt"></i>Logout</a>
         </div>

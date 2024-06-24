@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -29,14 +30,17 @@ export class ProfileComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput!: ElementRef;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.fetchProfile();
-    this.fetchPetListings();
-  }
+    this.route.params.subscribe(params => {
+      const userID = params['id'];
+      this.fetchProfile(userID);
+      this.fetchPetListings();
+  });
+}
 
-  fetchProfile() {
+  fetchProfile(userID: string) {
     this.http.get('/api/profile').subscribe((data: any) => {
       this.loggedinUser = data.loggedinUser;
       this.loggedinUserName = data.loggedinUserName;
