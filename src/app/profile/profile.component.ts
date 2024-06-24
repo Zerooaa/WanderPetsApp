@@ -6,6 +6,7 @@ import { RegisterDetailsService } from '../share/register-details.service'; // I
 import { ToastrService } from 'ngx-toastr';
 import { RegisterDetails } from '../share/register-details.model';
 
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -25,16 +26,14 @@ export class ProfileComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput!: ElementRef;
 
-
-  constructor(
-    private http: HttpClient,
-    private profileDetailsService: ProfileDetailsService,
-    private registerDetailsService: RegisterDetailsService, // Inject RegisterDetailsService
-    private toastr: ToastrService
-  ) {}
+  constructor(private http: HttpClient,
+              private registerDetailsService: RegisterDetailsService,
+              private toastr: ToastrService,
+              private profileDetailsService: ProfileDetailsService) {}
 
   ngOnInit() {
     this.fetchProfileData();
+    this.petListings();
   }
 
   fetchProfileData() {
@@ -78,7 +77,7 @@ export class ProfileComponent implements OnInit {
             // Optionally, check if there's a stored profile picture URL in local storage
             // this.loadStoredProfilePicture();
           },
-          error => {
+          (          error: any) => {
             console.error('Error fetching profile data', error);
             // Handle error fetching profile data
             this.toastr.error('Error fetching profile data', 'Profile');
@@ -126,7 +125,7 @@ export class ProfileComponent implements OnInit {
           console.log('Updated profile picture URL:', this.profileData.profilePictureUrl);
           this.selectedFile = null;
         },
-        error => {
+        (        error: any) => {
           console.error('Error Uploading Profile Picture', error);
           this.isPicturePopupVisible = false;
         }
