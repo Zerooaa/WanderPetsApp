@@ -15,41 +15,41 @@
   </div>
 </div>
 
-  <div class="petlisting-container">
-    <h1>PET LISTINGS</h1>
-    <div *ngFor="let pet of petListings" class="pet-card">
-      <img [src]="pet.imageUrl" alt="{{ pet.name }}" class="pet-image">
-      <div class="pet-info">
-        <h2>{{ pet.name }}</h2>
-        <p>{{ pet.status }}</p>
-        <button *ngIf="pet.status === 'Available'" (click)="adoptPet(pet)">Adopt</button>
-        <button *ngIf="pet.status === 'Reserved'" (click)="markAsAdopted(pet)">Mark as Adopted</button>
-      </div>
+<div class="petlisting-container">
+  <h1>PET LISTINGS</h1>
+  <div *ngFor="let pet of petListings" class="pet-card">
+    <img [src]="pet.imageUrl" alt="{{ pet.name }}" class="pet-image">
+    <div class="pet-info">
+      <h2>{{ pet.name }}</h2>
+      <p>{{ pet.status }}</p>
+      <button *ngIf="pet.status === 'Available'" (click)="adoptPet(pet)">Adopt</button>
+      <button *ngIf="pet.status === 'Reserved'" (click)="markAsAdopted(pet)">Mark as Adopted</button>
     </div>
   </div>
+</div>
 
-  <div *ngIf="isEditing" class="editing-container">
-    <div class="editing-content">
-      <form class="profile-info">
-        <input type="text"  placeholder="Full Name" required class="form-control" />
-        <input type="text" placeholder="Username" required class="form-control" />
-        <input type="email"  placeholder="Email" required class="form-control" />
-        <input type="text"  placeholder="Contact No" required class="form-control" />
-        <div class="button-container">
-          <button class="save-button" (click)="saveProfile()">Save</button>
-          <button class="cancel-button" (click)="cancelEdit()">Cancel</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div *ngIf="isPicturePopupVisible" class="picture-popup-container">
-    <div class="picture-popup-content">
-      <h2>New Profile Picture</h2>
-      <img [src]="newProfilePictureUrl" alt="New Profile Picture" class="new-profile-picture-preview">
+<div *ngIf="isEditing" class="editing-container">
+  <div class="editing-content">
+    <form class="profile-info">
+      <input type="text" placeholder="Full Name" [(ngModel)]="profileData.fullName" name="fullName" required class="form-control" />
+      <input type="text" placeholder="Username" [(ngModel)]="profileData.userName" name="userName" required class="form-control" />
+      <input type="email" placeholder="Email" [(ngModel)]="profileData.userEmail" name="userEmail" required class="form-control" />
+      <input type="text" placeholder="Contact No" [(ngModel)]="profileData.userPhone" name="userPhone" required class="form-control" />
       <div class="button-container">
-        <button class="save-button" (click)="saveNewProfilePicture()">Save</button>
-        <button class="cancel-button" (click)="cancelNewProfilePicture()">Cancel</button>
+        <button class="save-button" (click)="saveProfile()">Save</button>
+        <button class="cancel-button" (click)="cancelEdit()">Cancel</button>
       </div>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="isPicturePopupVisible" class="picture-popup-container">
+  <div class="picture-popup-content">
+    <h2>New Profile Picture</h2>
+    <img [src]="newProfilePictureUrl" alt="New Profile Picture" class="new-profile-picture-preview">
+    <div class="button-container">
+      <button class="save-button" (click)="saveNewProfilePicture()">Save</button>
+      <button class="cancel-button" (click)="cancelNewProfilePicture()">Cancel</button>
     </div>
   </div>
+</div>

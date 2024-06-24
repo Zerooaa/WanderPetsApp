@@ -25,7 +25,7 @@
       <li *ngIf="!showNavbar"><a routerLink="/loginPage" routerLinkActive="active">Login</a></li>
       <li *ngIf="showNavbar" class="dropdown" dropdown><a href="#" class="dropdown-toggle" dropdownToggle (click)="false">Welcome {{ loggedinUser }}</a>
         <div class="dropdown-menu custom-dropdown-menu" *dropdownMenu>
-          <a routerLink ="['/profilePage', loggedinUser]" class="dropdown-item"><i class="fas fa-tachameter-alt"></i>Profile</a>
+          <a href="/profilePage" class="dropdown-item"><i class="fas fa-tachameter-alt"></i>Profile</a>
           <a *ngIf="showNavbar" (click)="isChanging = !isChanging" class="dropdown-item"><i class="fas fa-user-circle"></i>Settings</a>
           <a *ngIf="showNavbar" (click)="onLogout()" href="/loginPage" class="dropdown-item"><i class="fas fa-sign-out-alt"></i>Logout</a>
         </div>

@@ -5,7 +5,6 @@ import { ProfileDetailsService } from '../share/profile-details.service';
 import { RegisterDetailsService } from '../share/register-details.service'; // Import RegisterDetailsService
 import { ToastrService } from 'ngx-toastr';
 import { RegisterDetails } from '../share/register-details.model';
-
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -33,7 +32,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.fetchProfileData();
-    this.petListings();
+    this.fetchPetListings();
   }
 
   fetchProfileData() {
@@ -49,7 +48,6 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    // Assuming you have a method in RegisterDetailsService to fetch user details by userID
     this.registerDetailsService.getRegisterDetails(userID).subscribe(
       (userData: any) => {
         // Use userData to populate profileData
@@ -58,8 +56,6 @@ export class ProfileComponent implements OnInit {
         this.profileData.userEmail = userData.userEmail;
         this.profileData.userPhone = userData.userPhone;
 
-        // Optionally, you can set other profileData properties if available in RegisterDetails
-        // this.profileData.someOtherProperty = userData.someOtherProperty;
 
         // Now fetch profile details using userID
         this.profileDetailsService.getProfileDetails(userID).subscribe(
@@ -77,14 +73,14 @@ export class ProfileComponent implements OnInit {
             // Optionally, check if there's a stored profile picture URL in local storage
             // this.loadStoredProfilePicture();
           },
-          (          error: any) => {
+          error => {
             console.error('Error fetching profile data', error);
             // Handle error fetching profile data
             this.toastr.error('Error fetching profile data', 'Profile');
           }
         );
       },
-      (      error: any) => {
+      error => {
         console.error('Error fetching user data', error);
         // Handle error fetching user data
         this.toastr.error('Error fetching user data', 'Profile');
@@ -125,7 +121,7 @@ export class ProfileComponent implements OnInit {
           console.log('Updated profile picture URL:', this.profileData.profilePictureUrl);
           this.selectedFile = null;
         },
-        (        error: any) => {
+        error => {
           console.error('Error Uploading Profile Picture', error);
           this.isPicturePopupVisible = false;
         }
@@ -160,6 +156,17 @@ export class ProfileComponent implements OnInit {
 
   resetProfileData() {
     // Implement resetProfileData logic here
+  }
+
+  fetchPetListings() {
+    this.http.get('/api/pet-listings').subscribe(
+      (response: any) => {
+        this.petListings = response;
+      },
+      error => {
+        console.error('Error fetching pet listings', error);
+      }
+    );
   }
 
   adoptPet(pet: any) {
