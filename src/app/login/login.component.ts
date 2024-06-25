@@ -31,28 +31,32 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {}
 
-  onSubmit(){
-    this.http.post<any>('https://localhost:7123/api/RegisterDetails/login', this.loginObj).subscribe((res: any) => {
-      if (res.user) {
-        // If there's a 'user' property in the response, login is successful
-        this.toastr.success('Login Successful', 'Login');
-        this.navbarService.display(); // Show the navbar upon successful login
-
-        // Store userID in local storage or session storage
-        localStorage.setItem('userID', res.user.userID);
-
-        this.router.navigate(['/homePage']);
-        console.log(res);
-      } else {
-        // Otherwise, login failed
-        this.toastr.error('Login Failed', 'Login');
-        console.log(res);
+  onSubmit() {
+    this.http.post<any>('https://localhost:7123/api/RegisterDetails/login', this.loginObj).subscribe(
+      (res) => {
+        if (res.user) {
+          this.toastr.success('Login Successful', 'Login');
+          this.navbarService.display();
+          if (res.user.userId && res.user.userName) {
+            localStorage.setItem('userID', res.user.userId.toString());
+            localStorage.setItem('userName', res.user.userName);
+            if (res.user.profilePictureUrl) {
+              localStorage.setItem(`profilePictureUrl_${res.user.userId}`, res.user.profilePictureUrl);
+            }
+            this.router.navigate(['/homePage']);
+          } else {
+            console.error('UserId or UserName is missing in the response:', res.user);
+          }
+        } else {
+          this.toastr.error('Login Failed', 'Login');
+          console.log('Login failed response:', res);
+        }
+      },
+      (error) => {
+        this.toastr.error('An error occurred', 'Login');
+        console.error('HTTP request error:', error);
       }
-    }, (error) => {
-      // Handle errors from the HTTP request itself
-      this.toastr.error('An error occurred', 'Login');
-      console.error(error);
-    });
+    );
   }
 }
 

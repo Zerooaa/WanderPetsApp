@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class NavbarService {
-  showNavbar: BehaviorSubject<boolean>;
+  private showNavbar: BehaviorSubject<boolean>;
 
   constructor() {
     this.showNavbar = new BehaviorSubject<boolean>(false);
@@ -21,5 +21,9 @@ export class NavbarService {
 
   getNavbarState() {
     return this.showNavbar.asObservable();
+  }
+
+  getCurrentState(): boolean {
+    return this.showNavbar.value;
   }
 }

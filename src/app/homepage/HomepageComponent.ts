@@ -5,6 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { PictureDetailsService } from '../share/picture-details.service';
 import { PictureDetails } from '../share/picture-details.model';
+import { AuthService } from '../services/auth-service';
+import { RegisterDetailsService } from '../share/register-details.service';
 
 @Component({
   selector: 'app-homepage',
@@ -19,13 +21,44 @@ export class HomepageComponent {
   posts: any[] = [];
   filteredPosts: any[] = [];
   filterType: string | null = null;
+  userId: string | null = null;
+  userName: string | null = null;
 
   constructor(private eRef: ElementRef,
               private renderer: Renderer2,
               public service: MessagesDetailsService,
               private toastr: ToastrService,
               private http: HttpClient,
-              public pictureserv: PictureDetailsService) {}
+              public pictureserv: PictureDetailsService,
+              public regserv: RegisterDetailsService) {}
+
+  ngOnInit(): void {
+    // Retrieve userId and userName from localStorage upon component initialization
+    this.userId = localStorage.getItem('userId');
+    this.userName = localStorage.getItem('userName');
+
+    if (this.userId) {
+      this.fetchUserPosts();
+    } else {
+      console.error('User is not logged in.');
+      // Handle user not logged in scenario
+    }
+  }
+
+  fetchUserPosts() {
+    // Adjust API endpoint to fetch posts for current userId
+    this.http.get<any[]>(`https://localhost:7123/api/PostMessages/user/${this.userId}`).subscribe(
+      posts => {
+        this.posts = posts;
+        this.applyFilter(); // If you have filters, apply them here
+      },
+      error => {
+        console.error('Error fetching posts:', error);
+        // Handle error
+      }
+    );
+  }
+
 
   handleInput() {
     this.isExpanded = this.service.formMessage.postMessage.trim() !== '';
@@ -55,13 +88,9 @@ export class HomepageComponent {
     }
   }
 
-  deletePhoto(index: number) {
-    this.selectedFiles.splice(index, 1);
-    this.photoPreviews.splice(index, 1);
-  }
-
   onSubmit(form: NgForm) {
-    if (form.valid) {
+
+
       if (this.selectedFiles.length > 0) {
         this.uploadPhotos().then(() => {
           this.submitForm(form);
@@ -73,7 +102,6 @@ export class HomepageComponent {
         this.submitForm(form);
       }
     }
-  }
 
   async uploadPhotos() {
     const uploadPromises = this.selectedFiles.map(file => {
@@ -192,5 +220,10 @@ export class HomepageComponent {
     post.editMessage = post.message;
     post.editTag = post.tag;
     post.isEditing = false;
+  }
+
+  deletePhoto(index: number) {
+    this.selectedFiles.splice(index, 1);
+    this.photoPreviews.splice(index, 1);
   }
 }

@@ -10,6 +10,7 @@ import { MessagesDetails } from './messages-details.model';
   providedIn: 'root'
 })
 export class MessagesDetailsService{
+  [x: string]: any;
   postMessageDetails(value: any): Observable<any> {
     throw new Error('Method not implemented.');
   }

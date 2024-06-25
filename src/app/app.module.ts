@@ -21,6 +21,7 @@ import { AuthService } from './services/auth-service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProfileComponent } from './profile/profile.component';
 import { SettingsComponent } from './settings/settings.component';
+import { AuthGuard } from './services/authguard-service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/landingPage', pathMatch: 'full'},
@@ -30,7 +31,7 @@ const routes: Routes = [
   { path: 'registerPage', component: RegisterDetailsComponent },
   { path: 'loginPage', component: LoginComponent },
   { path: 'homePage', component: HomepageComponent },
-  { path: 'profilePage', component: ProfileComponent },
+  { path: 'profilePage', component: ProfileComponent, canActivate: [AuthGuard]  },
   { path: 'settingsPage', component: SettingsComponent }
 ];
 
