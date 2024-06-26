@@ -23,6 +23,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AuthGuard } from './services/authguard-service';
 import { MessageComponent } from './message/message.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { VerificationComponent } from './forgot-password/verification/verification.component';
+import { PasswordResetComponent } from './forgot-password/password-reset/password-reset.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/landingPage', pathMatch: 'full'},
@@ -34,7 +37,10 @@ const routes: Routes = [
   { path: 'homePage', component: HomepageComponent },
   { path: 'profilePage', component: ProfileComponent, canActivate: [AuthGuard]  },
   { path: 'settingsPage', component: SettingsComponent },
-  { path: 'messagePage', component: MessageComponent }
+  { path: 'messagePage', component: MessageComponent },
+  { path: 'forgotPasswordPage', component: ForgotPasswordComponent },
+  { path: 'verificationPage', component: VerificationComponent },
+  { path: 'passwordResetPage', component: PasswordResetComponent }
 ];
 
 @NgModule({
@@ -49,7 +55,10 @@ const routes: Routes = [
     AboutComponent,
     ProfileComponent,
     SettingsComponent,
-    MessageComponent
+    MessageComponent,
+    ForgotPasswordComponent,
+    VerificationComponent,
+    PasswordResetComponent
    ],
 
   imports: [
