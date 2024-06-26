@@ -3,16 +3,14 @@ export class ProfileDetails {
   ProfilePic?: File;
   profilePictureUrl: any;
   userId: any;
-  userName?: string;
-  fullName?: string;
-  userEmail?: string;
-  userPhone?: number | null; // Make userPhone nullable
+  userName: string = '';
+  fullName: string = '';
+  userEmail: string = '';
+  userPhone: number = 0; // Optional, use 0 or undefined based on your need
+  userPassword: string = '';
+  subscribe: any;
 
-  constructor() {
-    // Initialize optional properties to avoid null errors
-    this.userName = '';
-    this.fullName = '';
-    this.userEmail = '';
-    this.userPhone = null; // or undefined, based on your preference
+  constructor(init?: Partial<ProfileDetails>) {
+    Object.assign(this, init);
   }
 }

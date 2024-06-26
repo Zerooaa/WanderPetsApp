@@ -1,11 +1,12 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ProfileDetails } from '../share/profile-details.model';
 import { ProfileDetailsService } from '../share/profile-details.service';
 import { RegisterDetailsService } from '../share/register-details.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserProfileService } from '../services/userProfile-service';
-import { RegisterDetails } from '../share/register-details.model'; // Ensure this is imported
+import { RegisterDetails } from '../share/register-details.model';
+import { ProfileDetails } from '../share/profile-details.model';
+import { UpdateProfileDTO } from '../services/UpdateProfileDTO';
 
 @Component({
   selector: 'app-profile',
@@ -14,13 +15,13 @@ import { RegisterDetails } from '../share/register-details.model'; // Ensure thi
 })
 export class ProfileComponent implements OnInit {
   profileData: RegisterDetails = new RegisterDetails();
-  originalProfileData: ProfileDetails = new ProfileDetails(); // To store original profile data
+  originalProfileData: RegisterDetails = new RegisterDetails(); // Updated to RegisterDetails
   defaultProfilePictureUrl: string = 'https://github.com/Zerooaa/WanderPetsApp/blob/master/public/pets.png?raw=true';
   isEditing: boolean = false;
   isPicturePopupVisible: boolean = false;
   newProfilePictureUrl: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
-  currentProfilePictureUrl: string = ''; // Added property to store current profile picture URL
+  currentProfilePictureUrl: string = '';
   petListings: any;
 
   @ViewChild('fileInput') fileInput!: ElementRef;
@@ -35,19 +36,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.fetchProfileData();
-    this.petListings();
-    this.initProfilePicture();
-  }
-
-  initProfilePicture() {
-    const userId = parseInt(localStorage.getItem('userID')!, 10);
-    this.userProfileService.loadProfilePictureUrl(userId);
-    this.userProfileService.getProfilePictureUrl().subscribe(
-      (url: string | null) => {
-        this.currentProfilePictureUrl = url || this.defaultProfilePictureUrl;
-        this.originalProfileData.profilePictureUrl = this.currentProfilePictureUrl;
-      }
-    );
+    this.fetchPetListings();
   }
 
   fetchProfileData() {
@@ -57,51 +46,35 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    const userID = parseInt(userIDString, 10); // Using radix 10
+    const userID = parseInt(userIDString, 10);
     if (isNaN(userID)) {
       console.error('Invalid user ID in local storage');
       return;
     }
 
-    // Fetch register details
     this.registerDetailsService.getRegisterDetails(userID).subscribe(
       (userData: RegisterDetails) => {
-        // Populate profileData
-        this.originalProfileData.userName = userData.userName;
-        this.originalProfileData.fullName = userData.fullName;
-        this.originalProfileData.userEmail = userData.userEmail;
-        this.originalProfileData.userPhone = userData.userPhone;
-        this.originalProfileData.userId = userData.userID;
-
-        // Fetch additional profile details
-        this.profileDetailsService.getProfileDetails(userID).subscribe(
-          (profileData: ProfileDetails) => {
-            this.originalProfileData = profileData;
-            this.originalProfileData = { ...profileData }; // Store original data
-            console.log('Fetched profile data:', this.profileData);
-
-            // Check if there's a stored profile picture URL in local storage
-            const storedProfilePictureUrl = localStorage.getItem(`profilePictureUrl_${userID}`);
-            if (storedProfilePictureUrl) {
-              this.originalProfileData.profilePictureUrl = storedProfilePictureUrl;
-            } else if (this.originalProfileData.ProfilePic) {
-              this.originalProfileData.profilePictureUrl = `data:image/jpeg;base64,${this.originalProfileData.ProfilePic}`;
-            } else {
-              this.originalProfileData.profilePictureUrl = this.defaultProfilePictureUrl;
-            }
-
-            this.currentProfilePictureUrl = this.originalProfileData.profilePictureUrl;
-            console.log('Profile picture URL set to:', this.originalProfileData.profilePictureUrl);
-          },
-          error => {
-            console.error('Error fetching profile data', error);
-            this.toastr.error('Error fetching profile data', 'Profile');
-          }
-        );
+        this.profileData = userData;
+        this.originalProfileData = { ...userData }; // Copy the data to originalProfileData
+        this.loadProfilePicture(userID);
       },
       error => {
         console.error('Error fetching user data', error);
         this.toastr.error('Error fetching user data', 'Profile');
+      }
+    );
+  }
+
+  loadProfilePicture(userID: number) {
+    this.profileDetailsService.getProfilePicture(userID).subscribe(
+      (response: { profilePic: string }) => {
+        this.profileData.profilePictureUrl = `data:image/jpeg;base64,${response.profilePic}`;
+        this.currentProfilePictureUrl = this.profileData.profilePictureUrl;
+      },
+      error => {
+        console.error('Error loading profile picture', error);
+        this.toastr.error('Error loading profile picture', 'Profile');
+        this.profileData.profilePictureUrl = this.defaultProfilePictureUrl;
       }
     );
   }
@@ -113,7 +86,7 @@ export class ProfileComponent implements OnInit {
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
-      this.currentProfilePictureUrl = this.originalProfileData.profilePictureUrl;
+      this.currentProfilePictureUrl = this.profileData.profilePictureUrl;
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.newProfilePictureUrl = e.target.result;
@@ -126,28 +99,16 @@ export class ProfileComponent implements OnInit {
 
   saveNewProfilePicture() {
     if (this.selectedFile) {
-      const userIDString = localStorage.getItem('userID');
-      if (!userIDString) {
-        console.error('User ID not found in local storage');
-        return;
-      }
-      const userID = parseInt(userIDString, 10); // Using radix 10
-      if (isNaN(userID)) {
-        console.error('Invalid user ID in local storage');
+      if (!this.profileData.userId) {
+        console.error('User ID not found in profile data');
         return;
       }
 
-      const formData = new FormData();
-      formData.append('ProfilePicture', this.selectedFile);
-
-      this.profileDetailsService.uploadImage(formData).subscribe(
+      this.profileDetailsService.uploadImage(this.selectedFile, this.profileData.userId).subscribe(
         (response: { profilePic: string }) => {
-          if (response.profilePic) {
-            const base64Image = `data:image/jpeg;base64,${response.profilePic}`;
-            localStorage.setItem(`profilePictureUrl_${userID}`, base64Image);
-            this.originalProfileData.profilePictureUrl = base64Image;
-            this.userProfileService.setProfilePictureUrl(base64Image);
-          }
+          const base64Image = `data:image/jpeg;base64,${response.profilePic}`;
+          this.profileData.profilePictureUrl = base64Image;
+          this.userProfileService.setProfilePictureUrl(base64Image);
           this.isPicturePopupVisible = false;
           this.newProfilePictureUrl = null;
           console.log('Profile Picture Uploaded Successfully', response);
@@ -165,11 +126,38 @@ export class ProfileComponent implements OnInit {
     this.newProfilePictureUrl = null;
     this.selectedFile = null;
     this.isPicturePopupVisible = false;
-    this.originalProfileData.profilePictureUrl = this.currentProfilePictureUrl;
+    this.profileData.profilePictureUrl = this.currentProfilePictureUrl;
   }
 
   saveProfile() {
+    if (!this.profileData.userId) {
+      console.error('User ID is missing.');
+      this.toastr.error('User ID is missing.', 'Profile');
+      return;
+    }
 
+    // Create the DTO with the necessary fields for the update
+    const updatedProfileData: UpdateProfileDTO = {
+      userId: this.profileData.userId,
+      userName: this.profileData.userName,
+      fullName: this.profileData.fullName,
+      userEmail: this.profileData.userEmail,
+      userPhone: this.profileData.userPhone
+    };
+
+    // Call the service to update the profile
+    this.registerDetailsService.updateRegisterDetails(updatedProfileData).subscribe(
+      (response) => {
+        this.toastr.success('Profile updated successfully', 'Profile');
+        this.isEditing = false;
+        // Update originalProfileData with the updated values
+        this.originalProfileData = { ...this.profileData };
+      },
+      error => {
+        console.error('Error updating profile', error);
+        this.toastr.error('Error updating profile', 'Profile');
+      }
+    );
   }
 
   cancelEdit() {
@@ -178,7 +166,18 @@ export class ProfileComponent implements OnInit {
   }
 
   resetProfileData() {
+    this.profileData = { ...this.originalProfileData }; // Reset profileData with originalProfileData
+  }
 
+  fetchPetListings() {
+    this.http.get('/api/pet-listings').subscribe(
+      (response: any) => {
+        this.petListings = response;
+      },
+      error => {
+        console.error('Error fetching pet listings', error);
+      }
+    );
   }
 
   adoptPet(pet: any) {

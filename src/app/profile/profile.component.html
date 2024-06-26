@@ -3,7 +3,7 @@
     <button class="edit-button" (click)="isEditing = true">
       <img src="/edit.png" alt="Edit">
     </button>
-    <img [src]="originalProfileData.profilePictureUrl" alt="Profile Picture" class="profile-picture">
+    <img [src]="profileData.profilePictureUrl" alt="Profile Picture" class="profile-picture">
     <button class="change-picture-button" (click)="triggerFileInput()">Change Picture</button>
     <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)">
     <div class="profile-info">
