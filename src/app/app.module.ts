@@ -22,6 +22,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ProfileComponent } from './profile/profile.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AuthGuard } from './services/authguard-service';
+import { MessageComponent } from './message/message.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/landingPage', pathMatch: 'full'},
@@ -32,7 +33,8 @@ const routes: Routes = [
   { path: 'loginPage', component: LoginComponent },
   { path: 'homePage', component: HomepageComponent },
   { path: 'profilePage', component: ProfileComponent, canActivate: [AuthGuard]  },
-  { path: 'settingsPage', component: SettingsComponent }
+  { path: 'settingsPage', component: SettingsComponent },
+  { path: 'messagePage', component: MessageComponent }
 ];
 
 @NgModule({
@@ -46,7 +48,8 @@ const routes: Routes = [
     LandingComponent,
     AboutComponent,
     ProfileComponent,
-    SettingsComponent
+    SettingsComponent,
+    MessageComponent
    ],
 
   imports: [
