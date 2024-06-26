@@ -2,7 +2,7 @@
   <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="post-form">
     <div class="profile-text">
       <div class="profile-pic">
-        <img src="#" alt="Profile Picture">
+        <img [src]="profilePictureUrl || defaultProfilePictureUrl" alt="Profile Picture">
       </div>
       <textarea
         id="post-textarea"
@@ -58,14 +58,14 @@
         <img src="/rabbit-icon.png" alt="Rabbit">
         <span>Rabbit</span>
       </button>
-    </div>    
+    </div>
   </div>
 </div>
 
 <div class="post-container" *ngFor="let post of filteredPosts">
   <div class="post-header">
     <div class="post-profile-pic">
-      <img [src]="post.userProfilePic" alt="Profile Picture">
+      <img [src]="profilePictureUrl || defaultProfilePictureUrl" alt="Profile Picture">
     </div>
     <div class="post-user-info">
       <span class="post-username">{{ post.username }}</span>

@@ -7,6 +7,7 @@ import { PictureDetailsService } from '../share/picture-details.service';
 import { PictureDetails } from '../share/picture-details.model';
 import { AuthService } from '../services/auth-service';
 import { RegisterDetailsService } from '../share/register-details.service';
+import { UserProfileService } from '../services/userProfile-service';
 
 @Component({
   selector: 'app-homepage',
@@ -23,6 +24,8 @@ export class HomepageComponent {
   filterType: string | null = null;
   userId: string | null = null;
   userName: string | null = null;
+  defaultProfilePictureUrl: string = 'https://github.com/Zerooaa/WanderPetsApp/blob/master/public/pets.png?raw=true'; // Default picture URL
+  profilePictureUrl: string | null = null;
 
   constructor(private eRef: ElementRef,
               private renderer: Renderer2,
@@ -30,7 +33,8 @@ export class HomepageComponent {
               private toastr: ToastrService,
               private http: HttpClient,
               public pictureserv: PictureDetailsService,
-              public regserv: RegisterDetailsService) {}
+              public regserv: RegisterDetailsService,
+              public userProfileService: UserProfileService) {}
 
   ngOnInit(): void {
     // Retrieve userId and userName from localStorage upon component initialization
@@ -42,6 +46,19 @@ export class HomepageComponent {
     } else {
       console.error('User is not logged in.');
       // Handle user not logged in scenario
+    }
+
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      const storedProfilePictureUrl = localStorage.getItem(`profilePictureUrl_${userId}`);
+      if (storedProfilePictureUrl) {
+        this.profilePictureUrl = storedProfilePictureUrl;
+      } else {
+        this.userProfileService.loadProfilePictureUrl(Number(userId));
+        this.userProfileService.getProfilePictureUrl().subscribe(url => {
+          this.profilePictureUrl = url;
+        });
+      }
     }
   }
 
@@ -58,7 +75,6 @@ export class HomepageComponent {
       }
     );
   }
-
 
   handleInput() {
     this.isExpanded = this.service.formMessage.postMessage.trim() !== '';
@@ -89,19 +105,17 @@ export class HomepageComponent {
   }
 
   onSubmit(form: NgForm) {
-
-
-      if (this.selectedFiles.length > 0) {
-        this.uploadPhotos().then(() => {
-          this.submitForm(form);
-        }).catch(err => {
-          console.log(err);
-          this.toastr.error('Failed to upload images', 'Image Upload');
-        });
-      } else {
+    if (this.selectedFiles.length > 0) {
+      this.uploadPhotos().then(() => {
         this.submitForm(form);
-      }
+      }).catch(err => {
+        console.log(err);
+        this.toastr.error('Failed to upload images', 'Image Upload');
+      });
+    } else {
+      this.submitForm(form);
     }
+  }
 
   async uploadPhotos() {
     const uploadPromises = this.selectedFiles.map(file => {
@@ -128,81 +142,47 @@ export class HomepageComponent {
   }
 
   addPost(post: any) {
-    const newPost = {
-      id: post.id,
-      userProfilePic: 'path_to_profile_pic',
-      username: 'User Name',
-      date: new Date(),
-      message: post.message,
-      photos: [...this.photoPreviews],
-      likes: 0,
-      comments: [],
-      reserved: false,
-      adopted: false,
-      showComments: false,
-      showMenu: false,
-      isEditing: false,
-      newComment: '',
-      tag: post.tag,
-      editMessage: post.message,
-      editTag: post.tag
-    };
-    this.posts.unshift(newPost);
-    this.applyFilter();
+
   }
 
   likePost(post: any) {
-    post.likes++;
+
   }
 
   toggleComments(post: any) {
-    post.showComments = !post.showComments;
+
   }
 
   addComment(post: any) {
-    if (post.newComment.trim() !== '') {
-      post.comments.push({
-        username: 'Current User',
-        text: post.newComment.trim()
-      });
-      post.newComment = '';
-    }
+
   }
 
   adoptPet(post: any) {
-    post.adopted = true;
+
   }
 
   filterPosts(filter: string) {
-    this.filterType = filter;
-    this.applyFilter();
+
   }
 
   applyFilter() {
-    if (this.filterType) {
-      this.filteredPosts = this.posts.filter(post => post.tag === this.filterType);
-    } else {
-      this.filteredPosts = this.posts;
-    }
+
   }
 
   resetPhotos() {
-    this.selectedFiles = [];
-    this.photoPreviews = [];
+
   }
 
   togglePostMenu(post: any) {
-    post.showMenu = !post.showMenu;
+
   }
 
   markAsReserved(post: any) {
-    post.reserved = true;
-    post.showMenu = false;
+
   }
 
   markAsAdopted(post: any) {
-    post.adopted = true;
-    post.showMenu = false;
+
   }
 
   startEditingPost(post: any) {

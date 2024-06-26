@@ -6,4 +6,5 @@
     postMessage: string = ""
     postTag: string = ""
     postLocation: string = ""
+    postFilter: string = ""
   }
