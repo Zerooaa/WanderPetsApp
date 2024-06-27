@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       },
       (error) => {
-        this.toastr.error('An error occurred', 'Login');
+        this.toastr.error('Incorrect Username/Password', 'Login');
         console.error('HTTP request error:', error);
       }
     );

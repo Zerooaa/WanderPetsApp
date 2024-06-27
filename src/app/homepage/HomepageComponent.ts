@@ -38,7 +38,7 @@ export class HomepageComponent {
 
   ngOnInit(): void {
     // Retrieve userId and userName from localStorage upon component initialization
-    this.userId = localStorage.getItem('userId');
+    this.userId = localStorage.getItem('userId'); // Ensure consistent casing
     this.userName = localStorage.getItem('userName');
 
     if (this.userId) {
@@ -48,7 +48,7 @@ export class HomepageComponent {
       // Handle user not logged in scenario
     }
 
-    const userId = localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId'); // Ensure consistent casing
     if (userId) {
       const storedProfilePictureUrl = localStorage.getItem(`profilePictureUrl_${userId}`);
       if (storedProfilePictureUrl) {

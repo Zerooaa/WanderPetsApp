@@ -18,7 +18,7 @@
       <div class="login-container">
         <h2>Login</h2>
         <form>
-          <input type="email"   placeholder="Email/Username" name="userName" [(ngModel)] = "loginObj.userName" required>
+          <input type="email"   placeholder="Username" name="userName" [(ngModel)] = "loginObj.userName" required>
           <input type="password"  placeholder="Password" name="userPassword" [(ngModel)] = "loginObj.userPassword" required>
           <a href="/forgotPasswordPage" class="forgot-password">Forgot Password?</a>
           <button type="button"  (click)="onSubmit()">LOGIN</button>

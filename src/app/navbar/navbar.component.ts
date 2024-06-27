@@ -37,7 +37,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   onLogout() {
-    const userIdString = localStorage.getItem('userID');
+    const userIdString = localStorage.getItem('userId');
     if (userIdString) {
       const profilePictureUrl = localStorage.getItem(`profilePictureUrl_${userIdString}`);
       localStorage.clear();
