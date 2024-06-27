@@ -72,7 +72,7 @@
       <span class="post-date">{{ post.date | date: 'short' }}</span>
     </div>
     <div class="post-menu">
-      <button class="menu-button" (click)="togglePostMenu(post)">
+      <button class="menu-button">
         <img src="" alt="Menu">
       </button>
       <div *ngIf="post.showMenu" class="post-menu-dropdown">

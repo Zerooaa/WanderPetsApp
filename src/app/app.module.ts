@@ -35,7 +35,7 @@ const routes: Routes = [
   { path: 'contactPage', component: ContactComponent },
   { path: 'registerPage', component: RegisterDetailsComponent },
   { path: 'loginPage', component: LoginComponent },
-  { path: 'homePage', component: HomepageComponent },
+  { path: 'homePage', component: HomepageComponent, canActivate: [AuthGuard] },
   { path: 'profilePage', component: ProfileComponent, canActivate: [AuthGuard]  },
   { path: 'settingsPage', component: SettingsComponent },
   { path: 'messagePage', component: MessageComponent },
