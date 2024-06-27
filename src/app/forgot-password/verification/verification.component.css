@@ -90,23 +90,9 @@
     border-radius: 30px;
     cursor: pointer;
     margin-top: 20px;
+    margin-bottom: 20px;
   }
   
   .verif-container button:hover {
     background-color: #5A360D;
-  }
-  
-  .resend {
-    font-size: 14px;
-    color: #7B4A12;
-    margin-top: 20px;
-  }
-  
-  .resend a {
-    color: #7B4A12;
-    text-decoration: none;
-  }
-  
-  .resend a:hover {
-    text-decoration: underline;
   }
