@@ -3,8 +3,14 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+}
+
+.backbutton {
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 h3 {

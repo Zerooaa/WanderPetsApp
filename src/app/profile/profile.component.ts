@@ -7,6 +7,7 @@ import { UserProfileService } from '../services/userProfile-service';
 import { RegisterDetails } from '../share/register-details.model';
 import { ProfileDetails } from '../share/profile-details.model';
 import { UpdateProfileDTO } from '../services/UpdateProfileDTO';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
@@ -31,7 +32,8 @@ export class ProfileComponent implements OnInit {
     private registerDetailsService: RegisterDetailsService,
     private toastr: ToastrService,
     private profileDetailsService: ProfileDetailsService,
-    private userProfileService: UserProfileService
+    private userProfileService: UserProfileService,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -202,5 +204,9 @@ export class ProfileComponent implements OnInit {
         console.error('Error updating pet status', error);
       }
     );
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }
