@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.toastr.success('Login Successful', 'Login');
           this.navbarService.display();
           if (res.user.userId && res.user.userName) {
-            localStorage.setItem('userId', res.user.userId.toString());
+            localStorage.setItem('userID', res.user.userId.toString());
             localStorage.setItem('userName', res.user.userName);
             if (res.user.profilePictureUrl) {
               localStorage.setItem(`profilePictureUrl_${res.user.userId}`, res.user.profilePictureUrl);

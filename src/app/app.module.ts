@@ -26,6 +26,7 @@ import { MessageComponent } from './message/message.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { VerificationComponent } from './forgot-password/verification/verification.component';
 import { PasswordResetComponent } from './forgot-password/password-reset/password-reset.component';
+import { NewPasswordComponent } from './forgot-password/new-password/new-password.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/landingPage', pathMatch: 'full'},
@@ -40,7 +41,8 @@ const routes: Routes = [
   { path: 'messagePage', component: MessageComponent },
   { path: 'forgotPasswordPage', component: ForgotPasswordComponent },
   { path: 'verificationPage', component: VerificationComponent },
-  { path: 'passwordResetPage', component: PasswordResetComponent }
+  { path: 'passwordResetPage', component: PasswordResetComponent },
+  { path: 'newPasswordPage', component: NewPasswordComponent }
 ];
 
 @NgModule({
@@ -58,7 +60,8 @@ const routes: Routes = [
     MessageComponent,
     ForgotPasswordComponent,
     VerificationComponent,
-    PasswordResetComponent
+    PasswordResetComponent,
+    NewPasswordComponent
    ],
 
   imports: [
