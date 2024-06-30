@@ -29,20 +29,21 @@ import { PasswordResetComponent } from './forgot-password/password-reset/passwor
 import { NewPasswordComponent } from './forgot-password/new-password/new-password.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/landingPage', pathMatch: 'full'},
+  { path: '', redirectTo: '/landingPage', pathMatch: 'full' },
   { path: 'landingPage', component: LandingComponent },
   { path: 'aboutPage', component: AboutComponent },
   { path: 'contactPage', component: ContactComponent },
   { path: 'registerPage', component: RegisterDetailsComponent },
   { path: 'loginPage', component: LoginComponent },
   { path: 'homePage', component: HomepageComponent, canActivate: [AuthGuard] },
-  { path: 'profilePage', component: ProfileComponent, canActivate: [AuthGuard]  },
-  { path: 'settingsPage', component: SettingsComponent },
-  { path: 'messagePage', component: MessageComponent },
+  { path: 'profilePage', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'settingsPage', component: SettingsComponent, canActivate: [AuthGuard] },
+  { path: 'messagePage', component: MessageComponent, canActivate: [AuthGuard] },
   { path: 'forgotPasswordPage', component: ForgotPasswordComponent },
   { path: 'verificationPage', component: VerificationComponent },
   { path: 'passwordResetPage', component: PasswordResetComponent },
-  { path: 'newPasswordPage', component: NewPasswordComponent }
+  { path: 'newPasswordPage', component: NewPasswordComponent },
+  { path: '**', redirectTo: '/landingPage' } // Fallback route
 ];
 
 @NgModule({

@@ -24,13 +24,33 @@
           </div>
         </div>
         <label for="add-photo" class="add-photo-label">Add Photo</label>
-        <input type="file" id="add-photo" (change)="onFilesSelected($event)" multiple #images="ngModel" name="images" [(ngModel)]="pictureserv.formPicture.Images" class="add-photo-input">
+        <input
+          type="file"
+          id="add-photo"
+          (change)="onFilesSelected($event)"
+          multiple
+          class="add-photo-input"
+        >
       </div>
       <div class="location">
-        <input type="text" placeholder="Location" #postLocation="ngModel" name="postLocation" [(ngModel)]="service.formMessage.postLocation" id="location">
+        <input
+          type="text"
+          placeholder="Location"
+          #postLocation="ngModel"
+          name="postLocation"
+          [(ngModel)]="service.formMessage.postLocation"
+          id="location"
+        >
       </div>
       <div class="add-tag">
-        <input type="text" placeholder="Add Tag" #postTag="ngModel" name="postTag" [(ngModel)]="service.formMessage.postTag" id="tag">
+        <input
+          type="text"
+          placeholder="Add Tag"
+          #postTag="ngModel"
+          name="postTag"
+          [(ngModel)]="service.formMessage.postTag"
+          id="tag"
+        >
       </div>
     </div>
     <div *ngIf="isExpanded" class="post-button-container">
@@ -39,82 +59,65 @@
   </form>
 </div>
 
-<div class="filter">
-  <button class="filter-container-button" (click)="toggleFilterPopup()">
-    <img src="filter.png" alt="Filter">
-  </button>
-  <div class="filter-popup" *ngIf="isPopupVisible">
-    <h2>Kind of Pet</h2>
-    <div class="filter-options">
-      <button class="filter-button" [class.selected]="filterType === 'cat'" (click)="filterPosts('cat')">
-        <img src="/cat-icon.png" alt="Cat">
-        <span>Cat</span>
-      </button>
-      <button class="filter-button" [class.selected]="filterType === 'dog'" (click)="filterPosts('dog')">
-        <img src="/dog-icon.png" alt="Dog">
-        <span>Dog</span>
-      </button>
-      <button class="filter-button" [class.selected]="filterType === 'rabbit'" (click)="filterPosts('rabbit')">
-        <img src="/rabbit-icon.png" alt="Rabbit">
-        <span>Rabbit</span>
-      </button>
+<div *ngIf="posts && posts.length > 0; else noPosts">
+  <div class="post-container" *ngFor="let post of posts">
+    <div class="post-header">
+      <div class="post-profile-pic">
+        <img [src]="profilePictureUrl || defaultProfilePictureUrl" alt="Profile Picture">
+      </div>
+      <div class="post-user-info">
+        <span class="post-username">{{ post.username }}</span>
+        <span class="post-date">{{ post.postedDate | date: 'short' }}</span>
+      </div>
+      <div class="post-menu">
+        <button class="menu-button" (click)="togglePostMenu(post)">
+          <img src="menu-icon.png" alt="Menu">
+        </button>
+        <div *ngIf="post.showMenu" class="post-menu-dropdown">
+          <button (click)="startEditingPost(post)">Edit</button>
+          <button (click)="markAsReserved(post)" [disabled]="post.reserved || post.adopted">Mark as Reserved</button>
+          <button (click)="markAsAdopted(post)" [disabled]="post.adopted">Mark as Adopted</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<div class="post-container" *ngFor="let post of filteredPosts">
-  <div class="post-header">
-    <div class="post-profile-pic">
-      <img [src]="profilePictureUrl || defaultProfilePictureUrl" alt="Profile Picture">
+    <div class="post-content" *ngIf="!post.isEditing">
+      <p>{{ post.postMessage }}</p>
+      <div *ngIf="post.images?.length > 0" class="post-photo">
+        <img *ngFor="let image of post.images" [src]="image" alt="Post Photo">
+      </div>
+      <div class="post-tag">{{ post.postTag }}</div>
     </div>
-    <div class="post-user-info">
-      <span class="post-username">{{ post.username }}</span>
-      <span class="post-date">{{ post.date | date: 'short' }}</span>
+
+    <div class="post-edit" *ngIf="post.isEditing">
+      <textarea [(ngModel)]="post.editMessage" class="edit-textarea"></textarea>
+      <input type="text" [(ngModel)]="post.editTag" class="edit-tag" placeholder="Edit Tag">
+      <div class="edit-buttons">
+        <button (click)="saveEdit(post)" class="save-button">Save</button>
+        <button (click)="cancelEdit(post)" class="cancel-button">Cancel</button>
+      </div>
     </div>
-    <div class="post-menu">
-      <button class="menu-button">
-        <img src="" alt="Menu">
-      </button>
-      <div *ngIf="post.showMenu" class="post-menu-dropdown">
-        <button (click)="startEditingPost(post)">Edit</button>
-        <button (click)="markAsReserved(post)" [disabled]="post.reserved || post.adopted">Mark as Reserved</button>
-        <button (click)="markAsAdopted(post)" [disabled]="post.adopted">Mark as Adopted</button>
+
+    <div class="post-actions">
+      <button (click)="likePost(post)" class="like-button">Like ({{ post.likes }})</button>
+      <button (click)="toggleComments(post)" class="comment-button">Comments ({{ post.comments?.length || 0 }})</button>
+      <button (click)="adoptPet(post)" *ngIf="!post.adopted" class="adopt-button">Adopt</button>
+      <span *ngIf="post.reserved" class="reserved-label">Reserved</span>
+      <span *ngIf="post.adopted" class="adopted-label">Adopted</span>
+    </div>
+
+    <div class="post-comments" *ngIf="post.showComments">
+      <div *ngFor="let comment of post.comments" class="comment">
+        <span class="comment-username">{{ comment.username }}</span>: <span class="comment-text">{{ comment.text }}</span>
+      </div>
+      <div class="add-comment">
+        <input type="text" [(ngModel)]="post.newComment" placeholder="Add a comment">
+        <button (click)="addComment(post)">Comment</button>
       </div>
     </div>
   </div>
-
-  <div class="post-content" *ngIf="!post.isEditing">
-    <p>{{ post.message }}</p>
-    <div *ngIf="post.photos && post.photos.length > 0" class="post-photo">
-      <img *ngFor="let photo of post.photos" [src]="photo" alt="Post Photo">
-    </div>
-    <div class="post-tag">{{ post.tag }}</div>
-  </div>
-
-  <div class="post-edit" *ngIf="post.isEditing">
-    <textarea [(ngModel)]="post.editMessage" class="edit-textarea"></textarea>
-    <input type="text" [(ngModel)]="post.editTag" class="edit-tag" placeholder="Edit Tag">
-    <div class="edit-buttons">
-      <button (click)="saveEdit(post)" class="save-button">Save</button>
-      <button (click)="cancelEdit(post)" class="cancel-button">Cancel</button>
-    </div>
-  </div>
-
-  <div class="post-actions">
-    <button (click)="likePost(post)" class="like-button">Like ({{ post.likes }})</button>
-    <button (click)="toggleComments(post)" class="comment-button">Comments ({{ post.comments.length }})</button>
-    <button (click)="adoptPet(post)" *ngIf="!post.adopted" class="adopt-button">Adopt</button>
-    <span *ngIf="post.reserved" class="reserved-label">Reserved</span>
-    <span *ngIf="post.adopted" class="adopted-label">Adopted</span>
-  </div>
-
-  <div class="post-comments" *ngIf="post.showComments">
-    <div *ngFor="let comment of post.comments" class="comment">
-      <span class="comment-username">{{ comment.username }}</span>: <span class="comment-text">{{ comment.text }}</span>
-    </div>
-    <div class="add-comment">
-      <input type="text" [(ngModel)]="post.newComment" placeholder="Add a comment">
-      <button (click)="addComment(post)">Comment</button>
-    </div>
-  </div>
 </div>
+
+<ng-template #noPosts>
+  <p>No posts to display.</p>
+</ng-template>

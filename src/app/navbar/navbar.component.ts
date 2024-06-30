@@ -21,10 +21,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const userID = localStorage.getItem('userID');
+    const userId = localStorage.getItem('userId');
     const userName = localStorage.getItem('userName');
 
-    if (userID && userName) {
+    if (userId && userName) {
       this.loggedinUser = userName;
       this.navbarService.display();
     } else {
@@ -36,17 +36,13 @@ export class NavBarComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  onLogout() {
-    const userIdString = localStorage.getItem('userId');
-    if (userIdString) {
-      const profilePictureUrl = localStorage.getItem(`profilePictureUrl_${userIdString}`);
-      localStorage.clear();
-      if (profilePictureUrl) {
-        localStorage.setItem(`profilePictureUrl_${userIdString}`, profilePictureUrl);
-      }
-    } else {
-      localStorage.clear();
-    }
+  logout(): void {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('profilePictureUrl'); // Clear any profile picture URL stored
+
+    // Optionally, clear any other local state or perform additional logout tasks
+    // Redirect to login page or home page as necessary
     this.router.navigate(['/login']);
   }
 }

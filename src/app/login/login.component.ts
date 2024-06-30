@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RegisterDetailsService } from '../share/register-details.service';
-import { AuthService } from '../services/auth-service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { NavbarService } from '../services/navbar-service';
+import { UserSessionService } from '../services/userSession-service';
 
 @Component({
   selector: 'app-login',
@@ -16,11 +16,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     public service: RegisterDetailsService,
-    private authService: AuthService,
     private toastr: ToastrService,
     private http: HttpClient,
     private router: Router,
-    private navbarService: NavbarService
+    private navbarService: NavbarService,
+    private userSessionService: UserSessionService
   ) {
     this.loginObj = new Login();
   }
@@ -32,20 +32,26 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   onSubmit() {
+    // Validate input before making HTTP request
+    if (!this.loginObj.userName || !this.loginObj.userPassword) {
+      this.toastr.error('Please enter both username and password.', 'Login');
+      return;
+    }
+
     this.http.post<any>('https://localhost:7123/api/RegisterDetails/login', this.loginObj).subscribe(
       (res) => {
         if (res.user) {
           this.toastr.success('Login Successful', 'Login');
           this.navbarService.display();
-          if (res.user.userId && res.user.userName) {
-            localStorage.setItem('userID', res.user.userId.toString());
-            localStorage.setItem('userName', res.user.userName);
-            if (res.user.profilePictureUrl) {
-              localStorage.setItem(`profilePictureUrl_${res.user.userId}`, res.user.profilePictureUrl);
-            }
+          const { userId, userName, profilePictureUrl } = res.user;
+
+          // Set session only if userId and userName are available
+          if (userId && userName) {
+            this.userSessionService.setUserSession(userId, userName, profilePictureUrl);
             this.router.navigate(['/homePage']);
           } else {
             console.error('UserId or UserName is missing in the response:', res.user);
+            this.toastr.error('Invalid server response. Please try again later.', 'Login');
           }
         } else {
           this.toastr.error('Login Failed', 'Login');

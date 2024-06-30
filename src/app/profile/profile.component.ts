@@ -8,6 +8,9 @@ import { RegisterDetails } from '../share/register-details.model';
 import { ProfileDetails } from '../share/profile-details.model';
 import { UpdateProfileDTO } from '../services/UpdateProfileDTO';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { MessagesDetails } from '../share/messages-details.model';
 
 @Component({
   selector: 'app-profile',
@@ -24,7 +27,9 @@ export class ProfileComponent implements OnInit {
   selectedFile: File | null = null;
   currentProfilePictureUrl: string = '';
   petListings: any;
-
+  posts: MessagesDetails[] = [];
+  private subscription: Subscription = new Subscription();
+  userId: string | null = null;
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   constructor(
@@ -33,16 +38,22 @@ export class ProfileComponent implements OnInit {
     private toastr: ToastrService,
     private profileDetailsService: ProfileDetailsService,
     private userProfileService: UserProfileService,
-    private location: Location
+    private location: Location,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.fetchProfileData();
-    this.fetchPetListings();
+    this.fetchUserPosts(); // Add this line to fetch user posts on initialization
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions to avoid memory leaks
+    this.subscription.unsubscribe();
   }
 
   fetchProfileData() {
-    const userIDString = localStorage.getItem('userID');
+    const userIDString = localStorage.getItem('userId');
     if (!userIDString) {
       console.error('User ID not found in local storage');
       return;
@@ -111,6 +122,10 @@ export class ProfileComponent implements OnInit {
           const base64Image = `data:image/jpeg;base64,${response.profilePic}`;
           this.profileData.profilePictureUrl = base64Image;
           this.userProfileService.setProfilePictureUrl(base64Image);
+
+          // Save profile picture URL to local storage
+          localStorage.setItem('profilePictureUrl', base64Image);
+
           this.isPicturePopupVisible = false;
           this.newProfilePictureUrl = null;
           console.log('Profile Picture Uploaded Successfully', response);
@@ -171,17 +186,6 @@ export class ProfileComponent implements OnInit {
     this.profileData = { ...this.originalProfileData }; // Reset profileData with originalProfileData
   }
 
-  fetchPetListings() {
-    this.http.get('/api/pet-listings').subscribe(
-      (response: any) => {
-        this.petListings = response;
-      },
-      error => {
-        console.error('Error fetching pet listings', error);
-      }
-    );
-  }
-
   adoptPet(pet: any) {
     pet.status = 'Reserved';
     this.http.post('/api/update-pet-status', { id: pet.id, status: 'Reserved' }).subscribe(
@@ -206,7 +210,33 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  goBack(): void {
-    this.location.back();
+  fetchUserPosts(): void {
+    const postsApiUrl = `https://localhost:7123/api/PostMessages/user/${this.userId}`;
+
+    this.subscription.add(
+      this.http.get<MessagesDetails[]>(postsApiUrl).subscribe({
+        next: (posts) => {
+          this.posts = posts.map(post => {
+            // Create a new post object with the correct type
+            const postWithImages: MessagesDetails = {
+              ...post,
+              images: post.imageUrl ? [{ name: post.imageUrl }] as any : [],
+              postedDate: new Date(post.postedDate)
+            };
+            // Log base64 string for debugging
+            if (post.imageUrl) {
+              console.log(`Base64 Image URL: ${post.imageUrl}`);
+            }
+            return postWithImages;
+          });
+          console.log('Fetched posts:', this.posts); // Debugging log
+        },
+        error: (err) => {
+          console.error('Error fetching user posts:', err);
+          this.toastr.error('Failed to fetch posts', 'Post Details');
+          this.posts = [];
+        }
+      })
+    );
   }
 }

@@ -2,7 +2,7 @@ export class ProfileDetails {
   pictureID?: number;
   ProfilePic?: File;
   profilePictureUrl: any;
-  userId: any;
+  userId: number = 0;
   userName: string = '';
   fullName: string = '';
   userEmail: string = '';
