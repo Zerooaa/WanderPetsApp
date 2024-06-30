@@ -23,8 +23,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
   selectedFiles: File[] = [];
   photoPreviews: string[] = [];
   posts: any[] = [];
-  filteredPosts: any[] = [];
-  filterType: string | null = null;
   userId: string | null = null;
   userName: string | null = null;
   defaultProfilePictureUrl: string = 'https://github.com/Zerooaa/WanderPetsApp/blob/master/public/pets.png?raw=true';
@@ -114,7 +112,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
             }
             return postWithImages;
           });
-          this.filteredPosts = this.posts;
           console.log('Fetched posts:', this.posts); // Debugging log
         },
         error: (err) => {
@@ -128,10 +125,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   handleInput() {
     this.isExpanded = this.service.formMessage.postMessage.trim() !== '';
-  }
-
-  toggleFilterPopup() {
-    this.isPopupVisible = !this.isPopupVisible;
   }
 
   onFilesSelected(event: any) {
