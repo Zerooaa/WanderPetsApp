@@ -183,7 +183,20 @@ export class HomepageComponent implements OnInit, OnDestroy {
     if (!post.likes) {
       post.likes = 0; // Initialize if undefined
     }
-    post.likes++;
+
+    if (!post.likedBy) {
+      post.likedBy = []; // Initialize if undefined
+    }
+
+    if (post.likedBy.includes(this.userId)) {
+      // User has already liked the post, so remove their like
+      post.likes--;
+      post.likedBy = post.likedBy.filter((id: string) => id !== this.userId);
+    } else {
+      // User has not liked the post, so add their like
+      post.likes++;
+      post.likedBy.push(this.userId);
+    }
   }
 
   toggleComments(post: any): void {
@@ -203,7 +216,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
   adoptPet(post: any) {
     post.adopted = true;
   }
-
 
   resetPhotos() {
     this.selectedFiles = [];

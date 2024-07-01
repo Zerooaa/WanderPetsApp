@@ -45,7 +45,7 @@
       <div class="add-tag">
         <input
           type="text"
-          placeholder="Add Tag"
+          placeholder="Tag (e.g. #dog, #cat)"
           #postTag="ngModel"
           name="postTag"
           [(ngModel)]="service.formMessage.postTag"
@@ -71,7 +71,7 @@
       </div>
       <div class="post-menu">
         <button class="menu-button" (click)="togglePostMenu(post)">
-          <img src="menu-icon.png" alt="Menu">
+          <img src="menu.png" alt="Menu">
         </button>
         <div *ngIf="post.showMenu" class="post-menu-dropdown">
           <button (click)="startEditingPost(post)">Edit</button>
@@ -80,26 +80,25 @@
         </div>
       </div>
     </div>
-
+    <p>{{ post.postMessage }}</p>
+    <p>{{ post.postTag }}</p>
     <div class="post-content" *ngIf="!post.isEditing">
-      <p>{{ post.postMessage }}</p>
       <div *ngIf="post.images?.length > 0" class="post-photo">
         <img *ngFor="let image of post.images" [src]="image" alt="Post Photo">
       </div>
-      <div class="post-tag">{{ post.postTag }}</div>
     </div>
 
     <div class="post-edit" *ngIf="post.isEditing">
       <textarea [(ngModel)]="post.editMessage" class="edit-textarea"></textarea>
       <input type="text" [(ngModel)]="post.editTag" class="edit-tag" placeholder="Edit Tag">
       <div class="edit-buttons">
-        <button (click)="saveEdit(post)" class="save-button">Save</button>
         <button (click)="cancelEdit(post)" class="cancel-button">Cancel</button>
+        <button (click)="saveEdit(post)" class="save-button">Save</button>
       </div>
     </div>
 
     <div class="post-actions">
-      <button (click)="likePost(post)" class="like-button">Like ({{ post.likes }})</button>
+      <button (click)="likePost(post)" class="like-button"><img src="like.png"> ({{ post.likes }})</button>
       <button (click)="toggleComments(post)" class="comment-button">Comments ({{ post.comments?.length || 0 }})</button>
       <button (click)="adoptPet(post)" *ngIf="!post.adopted" class="adopt-button">Adopt</button>
       <span *ngIf="post.reserved" class="reserved-label">Reserved</span>
