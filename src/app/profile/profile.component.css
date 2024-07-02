@@ -169,7 +169,7 @@ h1 {
     justify-content: center;
     align-items: center;
 }
-  
+
 .picture-popup-content {
     background-color: #FFF3D4;
     color: #8B4513;
@@ -181,7 +181,7 @@ h1 {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
-  
+
 .new-profile-picture-preview {
     border-radius: 50%;
     width: 300px;
@@ -197,7 +197,7 @@ h2 {
 .posts-container {
     margin-top: 20px;
   }
-  
+
 .post {
     background-color: #FFF3D4;
     border-radius: 10px;
@@ -265,4 +265,36 @@ h2 {
     background: none;
     border: none;
     cursor: pointer;
+}
+
+.adopted-pets-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.adopted-pet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+.adopted-pet-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.adopted-pet-name {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.adopted-pet-username {
+  color: #777;
 }

@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MessagesDetailsService } from '../share/messages-details.service';
 import { MessagesDetails } from '../share/messages-details.model';
+import { PostService } from '../services/postService-service';
+import { UserSessionService } from '../services/userSession-service';
 
 @Component({
   selector: 'app-profile',
@@ -31,6 +33,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
   userId: string | null = null;
   @ViewChild('fileInput') fileInput!: ElementRef;
+  userName: string | null | undefined;
+  adoptedPosts: MessagesDetails[] = [];
 
   constructor(
     private http: HttpClient,
@@ -40,28 +44,41 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private userProfileService: UserProfileService,
     private location: Location,
     private router: Router,
-    private messagesService: MessagesDetailsService
+    private messagesService: MessagesDetailsService,
+    private postService: PostService,
+    private userSessionService: UserSessionService
   ) {}
 
   ngOnInit() {
+    this.userId = this.userSessionService.getUserId();
+    this.userName = this.userSessionService.getUserName();
+
+    this.userId = this.userSessionService.getUserId();
+
+    if (!this.userId) {
+      console.error('User ID not found. Redirecting to login page.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.fetchProfileData();
     this.fetchUserPosts();
-  }
+    this.fetchAdoptedPosts();
+}
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 
   fetchProfileData() {
-    const userIDString = localStorage.getItem('userId');
-    if (!userIDString) {
-      console.error('User ID not found in local storage');
+    if (!this.userId) {
+      console.error('User ID is null.');
       return;
     }
 
-    const userID = parseInt(userIDString, 10);
+    const userID = parseInt(this.userId, 10);
     if (isNaN(userID)) {
-      console.error('Invalid user ID in local storage');
+      console.error('Invalid user ID');
       return;
     }
 
@@ -93,29 +110,24 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   fetchUserPosts(): void {
-    const userId = localStorage.getItem('userId');
-    if (!userId) {
-      console.error('User ID not found in local storage');
+    console.log('Fetching posts for User ID:', this.userId);
+    if (!this.userId) {
+      console.error('Cannot fetch posts. User ID is null.');
       return;
     }
 
-    const postsApiUrl = `https://localhost:7123/api/PostMessages/user/${userId}`;
-
     this.subscription.add(
-      this.http.get<any[]>(postsApiUrl).subscribe({
-        next: (posts) => {
-          this.posts = posts.map(post => {
-            const images = post.images.map((imageUrl: string) => {
-              const file = this.dataURItoBlob(imageUrl); // Convert data URI to Blob/File
-              return file;
-            });
-
+      this.postService.fetchUserPosts(this.userId).subscribe({
+        next: async (posts) => {
+          this.posts = await Promise.all(posts.map(async post => {
+            const files = post.imageUrl ? [await this.urlToFile(post.imageUrl, 'image.jpg')] : [];
+            const imageUrls = post.imageUrl ? [post.imageUrl] : [];
             return {
               ...post,
-              images: images,
-              postedDate: new Date(post.postedDate).toLocaleString()
+              images: files,
+              imageUrls: imageUrls
             };
-          });
+          }));
         },
         error: (err) => {
           console.error('Error fetching user posts:', err);
@@ -126,6 +138,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     );
   }
 
+  async urlToFile(url: string, filename: string, mimeType = 'image/jpeg'): Promise<File> {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    return new File([blob], filename, { type: mimeType });
+  }
   // Function to convert data URI to Blob/File
   dataURItoBlob(dataURI: string): File {
     const byteString = atob(dataURI.split(',')[1]);
@@ -226,4 +243,22 @@ export class ProfileComponent implements OnInit, OnDestroy {
   resetProfileData() {
     this.profileData = { ...this.originalProfileData };
   }
+
+  fetchAdoptedPosts(): void {
+    const adoptedPostsApiUrl = `https://localhost:7123/api/PostMessages/adopted/${this.userId}`;
+
+    this.http.get<MessagesDetails[]>(adoptedPostsApiUrl).subscribe({
+      next: (posts) => {
+        this.adoptedPosts = posts.map(post => ({
+          ...post,
+          imageUrls: post.imageUrl ? [post.imageUrl] : []  // Populate imageUrls from imageUrl
+        }));
+        console.log('Fetched adopted posts:', this.adoptedPosts); // Debugging log
+      },
+      error: (err) => {
+        console.error('Error fetching adopted posts:', err);
+      }
+    });
 }
+}
+

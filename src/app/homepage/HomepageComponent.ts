@@ -59,6 +59,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
     // Fetch user posts
     this.fetchUserPosts();
+    this.fetchAllPosts();
   }
 
   ngOnDestroy(): void {
@@ -212,9 +213,42 @@ export class HomepageComponent implements OnInit, OnDestroy {
       post.newComment = '';
     }
   }
+  adoptPet(post: any): void {
+    const adoptUrl = `https://localhost:7123/api/PostMessages/adopt/${post.id}/${this.userSessionService.getUserId()}`;
+    this.subscription.add(
+      this.http.put(adoptUrl, {}).subscribe({
+        next: () => {
+          this.toastr.success('Pet adopted successfully', 'Adopt Pet');
+          post.adopted = true;
+          post.adoptedByUserId = this.userSessionService.getUserId(); // Track who adopted the pet
+          // Remove the post from the homepage posts
+          this.posts = this.posts.filter(p => p.id !== post.id);
+        },
+        error: (err) => {
+          console.error('Error adopting pet:', err);
+          this.toastr.error('Failed to adopt pet', 'Adopt Pet');
+        }
+      })
+    );
+}
+  fetchAllPosts(): void {
+    const postsApiUrl = `https://localhost:7123/api/PostMessages`;
 
-  adoptPet(post: any) {
-    post.adopted = true;
+    this.subscription.add(
+      this.http.get<MessagesDetails[]>(postsApiUrl).subscribe({
+        next: (posts) => {
+          this.posts = posts.map(post => ({
+            ...post,
+            imageUrls: post.imageUrl ? [post.imageUrl] : []
+          }));
+          console.log('Fetched posts:', this.posts); // Debugging log
+        },
+        error: (err) => {
+          console.error('Error fetching posts:', err);
+          this.toastr.error('Failed to fetch posts', 'Post Details');
+        }
+      })
+    );
   }
 
   resetPhotos() {

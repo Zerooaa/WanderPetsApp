@@ -83,8 +83,8 @@
     <p>{{ post.postMessage }}</p>
     <p>{{ post.postTag }}</p>
     <div class="post-content" *ngIf="!post.isEditing">
-      <div *ngIf="post.images?.length > 0" class="post-photo">
-        <img *ngFor="let image of post.images" [src]="image" alt="Post Photo">
+      <div *ngIf="post.imageUrls?.length > 0" class="post-photo">
+        <img *ngFor="let image of post.imageUrls" [src]="image" alt="Post Photo">
       </div>
     </div>
 
