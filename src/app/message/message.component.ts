@@ -8,10 +8,6 @@ import { Location } from '@angular/common';
 })
 export class MessageComponent {
   
-  constructor(private location: Location) {}
-  
-  goBack(): void {
-    this.location.back();
-  }
+  constructor() {}
 
 }

@@ -7,12 +7,6 @@ body {
     justify-content: center;
 }
 
-.backbutton {
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
 h3 {
     font-weight: bold;
     margin-top: 10px;

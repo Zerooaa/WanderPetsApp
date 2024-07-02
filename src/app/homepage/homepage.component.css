@@ -190,6 +190,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  background: none;
 }
 
 .post-user-info {
@@ -205,6 +206,25 @@
 .post-date {
   font-size: 0.8em;
   color: #8B4513;
+}
+
+.messagepost {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.locationpost {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.tagpost {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  color: #ec8f4d;
 }
 
 .menu-button {
@@ -245,13 +265,15 @@
 
 .post-content {
   margin: 10px 0;
-  border: 1px solid #8B4513;
 }
 
 .post-photo {
+  padding: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid #8B4513;
+  border-radius: 10px;
 }
 
 .post-photo img {

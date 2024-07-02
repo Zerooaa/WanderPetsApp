@@ -7,7 +7,6 @@ import { UserProfileService } from '../services/userProfile-service';
 import { RegisterDetails } from '../share/register-details.model';
 import { ProfileDetails } from '../share/profile-details.model';
 import { UpdateProfileDTO } from '../services/UpdateProfileDTO';
-import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MessagesDetailsService } from '../share/messages-details.service';
@@ -42,7 +41,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     private profileDetailsService: ProfileDetailsService,
     private userProfileService: UserProfileService,
-    private location: Location,
     private router: Router,
     private messagesService: MessagesDetailsService,
     private postService: PostService,

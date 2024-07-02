@@ -205,14 +205,23 @@ export class HomepageComponent implements OnInit, OnDestroy {
   }
 
   addComment(post: any): void {
-    if (post.newComment.trim() !== '') {
-      post.comments.push({
+    if (post.newComment && post.newComment.trim() !== '') {
+      const newComment = {
         username: this.userName,
         text: post.newComment
-      });
+      };
+
+      // Add the comment to the post
+      if (!post.comments) {
+        post.comments = [];
+      }
+      post.comments.push(newComment);
+
+      // Reset the comment input field
       post.newComment = '';
     }
   }
+
   adoptPet(post: any): void {
     const adoptUrl = `https://localhost:7123/api/PostMessages/adopt/${post.id}/${this.userSessionService.getUserId()}`;
     this.subscription.add(

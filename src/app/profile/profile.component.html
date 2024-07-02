@@ -1,8 +1,3 @@
-<!-- Back button -->
-<button routerLink="/homePage" routerLinkActive="active" class="backbutton">
-  <img src="back.png" alt="Back">
-</button>
-
 <!-- Profile container -->
 <div class="profile-container">
   <div class="profile-header">
@@ -50,38 +45,44 @@
 </div>
 
 <!-- Adopted Pets container -->
-<h2>Interested</h2>
-<div class="adopted-pets-container" *ngIf="adoptedPosts && adoptedPosts.length > 0">
-  <div class="adopted-pet" *ngFor="let post of adoptedPosts">
-    <img *ngIf="post.imageUrls.length > 0" [src]="post.imageUrls[0]" alt="Adopted Pet Image" class="adopted-pet-image">
-    <p class="adopted-pet-name">{{ post.postMessage }}</p>
-    <p class="adopted-pet-username">{{ post.username }}</p>
+<section class="Interested">
+  <h2 class="title">Interested</h2>
+  <div class="adopted-pets-container" *ngIf="adoptedPosts && adoptedPosts.length > 0">
+    <div class="adopted-pet" *ngFor="let post of adoptedPosts">
+      <img *ngIf="post.imageUrls.length > 0" [src]="post.imageUrls[0]" alt="Adopted Pet Image" class="adopted-pet-image">
+      <p class="adopted-pet-tag">{{ post.postTag }}</p>
+      <p class="adopted-pet-username">{{ post.username }}</p>
+    </div>
   </div>
-</div>
-<ng-template #noAdoptedPets>
-  <p>No adopted pets to display.</p>
-</ng-template>
+  <ng-template #noAdoptedPets>
+    <p>No adopted pets to display.</p>
+  </ng-template>
+</section>
 
 <!-- User Posts -->
-<h2>User Posts</h2>
-<div class="posts-container" *ngIf="posts && posts.length > 0; else noPosts">
-  <div class="post" *ngFor="let post of posts">
-    <div class="post-header">
-      <img [src]="profileData.profilePictureUrl || defaultProfilePictureUrl" alt="Profile Picture" class="post-profile-pic">
-      <div class="post-user-info">
-        <span class="post-username">{{ profileData.userName }}</span>
-        <span class="post-date">{{ post.postedDate | date: 'short' }}</span>
+<section class="UserPost">
+  <h2 class="title">User Posts</h2>
+  <div class="posts-container-wrapper">
+    <div class="posts-container" *ngIf="posts && posts.length > 0; else noPosts">
+      <div class="post" *ngFor="let post of posts">
+        <div class="post-header">
+          <img [src]="profileData.profilePictureUrl || defaultProfilePictureUrl" alt="Profile Picture" class="post-profile-pic">
+          <div class="post-user-info">
+            <span class="post-username">{{ profileData.userName }}</span>
+            <span class="post-date">{{ post.postedDate | date: 'short' }}</span>
+          </div>
+        </div>
+        <div class="post-content">
+          <div class="post-message">{{ post.postMessage }}</div>
+          <div *ngIf="post.imageUrls && post.imageUrls.length > 0" class="post-images">
+            <img *ngFor="let imageUrl of post.imageUrls" [src]="imageUrl" alt="Post Image" class="post-image">
+          </div>
+          <div class="post-tag">{{ post.postTag }}</div>
+        </div>
       </div>
-    </div>
-    <div class="post-content">
-      <p>{{ post.postMessage }}</p>
-      <div *ngIf="post.imageUrls && post.imageUrls.length > 0" class="post-images">
-        <img *ngFor="let imageUrl of post.imageUrls" [src]="imageUrl" alt="Post Image" class="post-image">
-      </div>
-      <div class="post-tag">{{ post.postTag }}</div>
     </div>
   </div>
-</div>
-<ng-template #noPosts>
-  <p>No posts to display.</p>
-</ng-template>
+  <ng-template #noPosts>
+    <p>No posts to display.</p>
+  </ng-template>
+</section>
