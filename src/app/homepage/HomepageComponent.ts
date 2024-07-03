@@ -283,9 +283,25 @@ export class HomepageComponent implements OnInit, OnDestroy {
   }
 
   saveEdit(post: any) {
-    post.message = post.editMessage;
-    post.tag = post.editTag;
-    post.isEditing = false;
+    const updatedPost = {
+      id: post.id,
+      postMessage: post.editMessage,
+      postTag: post.editTag
+    };
+
+    this.http.put(`https://localhost:7123/api/PostMessages/${post.id}`, updatedPost)
+      .subscribe({
+        next: () => {
+          post.postMessage = post.editMessage;
+          post.postTag = post.editTag;
+          post.isEditing = false;
+          this.toastr.success('Post updated successfully', 'Edit Post');
+        },
+        error: (err) => {
+          console.error('Error updating post:', err);
+          this.toastr.error('Failed to update post', 'Edit Post');
+        }
+      });
   }
 
   cancelEdit(post: any) {
