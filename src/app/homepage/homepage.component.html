@@ -100,8 +100,8 @@
     </div>
 
     <div class="post-actions">
-      <button (click)="likePost(post)" class="like-button"><img src="like.png"> ({{ post.likes }})</button>
-      <button (click)="toggleComments(post)" class="comment-button">Comments ({{ post.comments?.length || 0 }})</button>
+      <button (click)="likePost(post)" class="like-button"><img src="like.png">{{ post.likes }}</button>
+      <button (click)="toggleComments(post)" class="comment-button">Comments{{ post.comments }}</button>
       <button (click)="adoptPet(post)" *ngIf="!post.adopted" class="adopt-button">Adopt</button>
       <span *ngIf="post.reserved" class="reserved-label">Reserved</span>
       <span *ngIf="post.adopted" class="adopted-label">Adopted</span>
