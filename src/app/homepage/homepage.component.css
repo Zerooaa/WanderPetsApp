@@ -9,10 +9,9 @@
 
 .post-form {
   margin-top: 20px;
-  margin-bottom: 20px;
   padding: 20px;
   border: 1px solid #763C00;
-  border-radius: 50px;
+  border-radius: 30px;
   background-color: #FFF8DC;
   display: flex;
   flex-direction: column;
@@ -293,9 +292,9 @@
 
 .like-button, .comment-button, .adopt-button, .reserved-button {
   background: #F7E8B2;
-  border-radius: 30px;
+  border-radius: 10px;
   border: 1px solid #8B4513;
-  padding: 5px 10px;
+  padding: 5px 115px;
   cursor: pointer;
   color: #8B4513;
   font-size: 1em;
