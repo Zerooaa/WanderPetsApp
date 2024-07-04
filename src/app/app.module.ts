@@ -37,6 +37,7 @@ const routes: Routes = [
   { path: 'loginPage', component: LoginComponent },
   { path: 'homePage', component: HomepageComponent, canActivate: [AuthGuard] },
   { path: 'profilePage', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'profile/:id', component: ProfileComponent, canActivate: [AuthGuard]  },
   { path: 'settingsPage', component: SettingsComponent, canActivate: [AuthGuard] },
   { path: 'messagePage', component: MessageComponent, canActivate: [AuthGuard] },
   { path: 'forgotPasswordPage', component: ForgotPasswordComponent },

@@ -95,6 +95,10 @@ export class HomepageComponent implements OnInit, OnDestroy {
     }
   }
 
+  navigateToUserProfile(userId: string) {
+    this.router.navigate(['/profile', userId]);
+  }
+
   fetchUserPosts(): void {
     const postsApiUrl = `https://localhost:7123/api/PostMessages/user/${this.userId}`;
 

@@ -7,7 +7,7 @@ import { UserProfileService } from '../services/userProfile-service';
 import { RegisterDetails } from '../share/register-details.model';
 import { ProfileDetails } from '../share/profile-details.model';
 import { UpdateProfileDTO } from '../services/UpdateProfileDTO';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MessagesDetailsService } from '../share/messages-details.service';
 import { MessagesDetails } from '../share/messages-details.model';
@@ -36,33 +36,35 @@ export class ProfileComponent implements OnInit, OnDestroy {
   adoptedPosts: MessagesDetails[] = [];
 
   constructor(
-    private http: HttpClient,
-    private registerDetailsService: RegisterDetailsService,
-    private toastr: ToastrService,
-    private profileDetailsService: ProfileDetailsService,
-    private userProfileService: UserProfileService,
-    private router: Router,
-    private messagesService: MessagesDetailsService,
-    private postService: PostService,
-    private userSessionService: UserSessionService
-  ) {}
+      private http: HttpClient,
+      private registerDetailsService: RegisterDetailsService,
+      private toastr: ToastrService,
+      private profileDetailsService: ProfileDetailsService,
+      private userProfileService: UserProfileService,
+      private router: Router,
+      private route: ActivatedRoute, // Add ActivatedRoute here
+      private messagesService: MessagesDetailsService,
+      private postService: PostService,
+      private userSessionService: UserSessionService,
+    ) {}
 
-  ngOnInit() {
-    this.userId = this.userSessionService.getUserId();
-    this.userName = this.userSessionService.getUserName();
+    ngOnInit() {
+      this.route.paramMap.subscribe(params => {
+        const routeUserId = params.get('id');
+        this.userId = routeUserId ? routeUserId : this.userSessionService.getUserId();
 
-    this.userId = this.userSessionService.getUserId();
+        if (!this.userId) {
+          console.error('User ID not found in route or session.');
+          this.router.navigate(['/login']);
+          return;
+        }
 
-    if (!this.userId) {
-      console.error('User ID not found. Redirecting to login page.');
-      this.router.navigate(['/login']);
-      return;
+        this.userName = this.userSessionService.getUserName();
+        this.fetchProfileData();
+        this.fetchUserPosts();
+        this.fetchAdoptedPosts();
+      });
     }
-
-    this.fetchProfileData();
-    this.fetchUserPosts();
-    this.fetchAdoptedPosts();
-}
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
