@@ -1,11 +1,11 @@
 <!-- Profile container -->
 <div class="profile-container">
   <div class="profile-header">
-    <button class="edit-button" (click)="isEditing = true">
+    <button class="edit-button" [disabled]="isEditButtonDisabled" (click)="isEditing = true">
       <img src="/edit.png" alt="Edit">
     </button>
     <img [src]="profileData.profilePictureUrl || defaultProfilePictureUrl" alt="Profile Picture" class="profile-picture">
-    <button class="change-picture-button" (click)="triggerFileInput()">Change Picture</button>
+    <button class="change-picture-button" (click)="triggerFileInput()" [disabled]="isEditButtonDisabled">Change Picture</button>
     <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)">
     <div class="profile-info">
       <h2 class="profile-name">{{ profileData.fullName }}</h2>
@@ -64,7 +64,7 @@
   <h2 class="title">User Posts</h2>
   <div class="posts-container-wrapper">
     <div class="posts-container" *ngIf="posts && posts.length > 0; else noPosts">
-      <div class="post" *ngFor="let post of posts">
+      <div class="post" *ngFor="let post of posts" (click)="navigateToPost(post.id)">
         <div class="post-header">
           <img [src]="profileData.profilePictureUrl || defaultProfilePictureUrl" alt="Profile Picture" class="post-profile-pic">
           <div class="post-user-info">

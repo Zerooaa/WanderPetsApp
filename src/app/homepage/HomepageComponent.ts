@@ -232,10 +232,9 @@ export class HomepageComponent implements OnInit, OnDestroy {
       this.http.put(adoptUrl, {}).subscribe({
         next: () => {
           this.toastr.success('Pet adopted successfully', 'Adopt Pet');
-          post.adopted = true;
+          post.reserved = true;
           post.adoptedByUserId = this.userSessionService.getUserId(); // Track who adopted the pet
-          // Remove the post from the homepage posts
-          this.posts = this.posts.filter(p => p.id !== post.id);
+          // No longer remove the post here
         },
         error: (err) => {
           console.error('Error adopting pet:', err);
@@ -243,7 +242,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
         }
       })
     );
-}
+  }
+
   fetchAllPosts(): void {
     const postsApiUrl = `https://localhost:7123/api/PostMessages`;
 
@@ -273,12 +273,10 @@ export class HomepageComponent implements OnInit, OnDestroy {
     post.showMenu = !post.showMenu;
   }
 
-  markAsReserved(post: any) {
-    post.reserved = true;
-  }
-
-  markAsAdopted(post: any) {
+  markAsAdopted(post: any): void {
     post.adopted = true;
+    // Remove the post from the homepage posts
+    this.posts = this.posts.filter(p => p.id !== post.id);
   }
 
   startEditingPost(post: any) {

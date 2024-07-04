@@ -60,9 +60,9 @@
 </div>
 
 <div *ngIf="posts && posts.length > 0; else noPosts">
-  <div class="post-container" *ngFor="let post of posts">
+  <div class="post-container" *ngFor="let post of posts" >
     <div class="post-header">
-      <div class="post-profile-pic">
+      <div class="post-profile-pic" (click)="navigateToUserProfile(post.userId)">
         <img [src]="profilePictureUrl || defaultProfilePictureUrl" alt="Profile Picture">
       </div>
       <div class="post-user-info">
@@ -70,12 +70,11 @@
         <span class="post-date">{{ post.postedDate | date: 'short' }}</span>
       </div>
       <div class="post-menu">
-        <button class="menu-button" (click)="togglePostMenu(post)">
+        <button class="menu-button" (click)="togglePostMenu(post)" [disabled]="post.userId != userId">
           <img src="menu.png" alt="Menu">
         </button>
         <div *ngIf="post.showMenu" class="post-menu-dropdown">
           <button (click)="startEditingPost(post)">Edit</button>
-          <button (click)="markAsReserved(post)" [disabled]="post.reserved || post.adopted">Mark as Reserved</button>
           <button (click)="markAsAdopted(post)" [disabled]="post.adopted">Mark as Adopted</button>
         </div>
       </div>
@@ -102,10 +101,10 @@
     <div class="post-actions">
       <button (click)="likePost(post)" class="like-button"><img src="like.png">{{ post.likes }}</button>
       <button (click)="toggleComments(post)" class="comment-button">Comments{{ post.comments }}</button>
-      <button (click)="adoptPet(post)" *ngIf="!post.adopted" class="adopt-button">Adopt</button>
+      <button (click)="adoptPet(post)" *ngIf="!post.reserved && !post.adopted" class="adopt-button">Adopt</button>
       <span *ngIf="post.reserved" class="reserved-label">Reserved</span>
       <span *ngIf="post.adopted" class="adopted-label">Adopted</span>
-    </div>
+    </div>    
 
     <div class="post-comments" *ngIf="post.showComments">
       <div *ngFor="let comment of post.comments" class="comment">

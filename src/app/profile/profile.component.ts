@@ -24,6 +24,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   originalProfileData: RegisterDetails = new RegisterDetails();
   defaultProfilePictureUrl: string = 'https://github.com/Zerooaa/WanderPetsApp/blob/master/public/pets.png?raw=true';
   isEditing: boolean = false;
+  isEditButtonDisabled: boolean = false;
   isPicturePopupVisible: boolean = false;
   newProfilePictureUrl: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
@@ -48,23 +49,29 @@ export class ProfileComponent implements OnInit, OnDestroy {
       private userSessionService: UserSessionService,
     ) {}
 
-    ngOnInit() {
-      this.route.paramMap.subscribe(params => {
-        const routeUserId = params.get('id');
-        this.userId = routeUserId ? routeUserId : this.userSessionService.getUserId();
-
-        if (!this.userId) {
-          console.error('User ID not found in route or session.');
-          this.router.navigate(['/login']);
-          return;
-        }
-
-        this.userName = this.userSessionService.getUserName();
-        this.fetchProfileData();
-        this.fetchUserPosts();
-        this.fetchAdoptedPosts();
-      });
-    }
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      const routeUserId = params.get('id');
+      this.userId = routeUserId ? routeUserId : this.userSessionService.getUserId();
+  
+      if (!this.userId) {
+        console.error('User ID not found in route or session.');
+        this.router.navigate(['/login']);
+        return;
+      }
+  
+      this.userName = this.userSessionService.getUserName();
+  
+      // Check if the logged-in user is viewing their own profile
+      const loggedInUserId = this.userSessionService.getUserId();
+      this.isEditButtonDisabled = this.userId !== loggedInUserId;
+  
+      this.fetchProfileData();
+      this.fetchUserPosts();
+      this.fetchAdoptedPosts();
+    });
+  }
+    
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
@@ -244,6 +251,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.profileData = { ...this.originalProfileData };
   }
 
+  navigateToPost(postId: number) {
+    this.router.navigate(['/homepage'], { queryParams: { postId: postId } });
+  }
+
   fetchAdoptedPosts(): void {
     const adoptedPostsApiUrl = `https://localhost:7123/api/PostMessages/adopted/${this.userId}`;
 
@@ -259,6 +270,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         console.error('Error fetching adopted posts:', err);
       }
     });
-}
+  }
 }
 

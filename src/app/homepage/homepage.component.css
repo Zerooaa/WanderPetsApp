@@ -190,6 +190,7 @@
   height: 40px;
   border-radius: 50%;
   background: none;
+  cursor: pointer;
 }
 
 .post-user-info {
@@ -200,6 +201,7 @@
 .post-username {
   font-weight: bold;
   color: #8B4513;
+  cursor: pointer;
 }
 
 .post-date {
@@ -287,10 +289,16 @@
 }
 
 .reserved-label, .adopted-label {
+  border-radius: 10px;
+  border: 1px solid #8B4513;
+  padding: 5px 105px;
   color: #8B4513;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
 }
 
-.like-button, .comment-button, .adopt-button, .reserved-button {
+.like-button, .comment-button, .adopt-button {
   background: #F7E8B2;
   border-radius: 10px;
   border: 1px solid #8B4513;
@@ -302,7 +310,7 @@
   align-items: center;
 }
 
-.like-button:hover, .comment-button:hover, .adopt-button:hover, .reserved-button:hover {
+.like-button:hover, .comment-button:hover, .adopt-button:hover {
   color: #956935;
 }
 
