@@ -27,6 +27,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { VerificationComponent } from './forgot-password/verification/verification.component';
 import { PasswordResetComponent } from './forgot-password/password-reset/password-reset.component';
 import { NewPasswordComponent } from './forgot-password/new-password/new-password.component';
+import { NotificationComponent } from './notification/notification.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/landingPage', pathMatch: 'full' },
@@ -38,6 +39,7 @@ const routes: Routes = [
   { path: 'homePage', component: HomepageComponent, canActivate: [AuthGuard] },
   { path: 'profilePage', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'profile/:id', component: ProfileComponent, canActivate: [AuthGuard]  },
+  { path: 'notificationPage', component: NotificationComponent, canActivate: [AuthGuard]},
   { path: 'settingsPage', component: SettingsComponent, canActivate: [AuthGuard] },
   { path: 'messagePage', component: MessageComponent, canActivate: [AuthGuard] },
   { path: 'forgotPasswordPage', component: ForgotPasswordComponent },
@@ -63,7 +65,8 @@ const routes: Routes = [
     ForgotPasswordComponent,
     VerificationComponent,
     PasswordResetComponent,
-    NewPasswordComponent
+    NewPasswordComponent,
+    NotificationComponent
    ],
 
   imports: [

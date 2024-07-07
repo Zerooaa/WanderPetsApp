@@ -27,6 +27,7 @@
         <a href="#" class="dropdown-toggle" dropdownToggle (click)="false">Welcome {{ loggedinUser }}</a>
         <div class="dropdown-menu custom-dropdown-menu" *dropdownMenu>
           <a routerLink="/profilePage" routerLinkActive="active" class="dropdown-item"><i class="fas fa-tachometer-alt"></i>Profile</a>
+          <a href="/notificationPage" routerLinkActive="active" class="dropdown-item"><i class="fas fa-bell"></i>Notifications</a>
           <a (click)="logout()" href="/loginPage" class="dropdown-item"><i class="fas fa-sign-out-alt"></i>Logout</a>
         </div>
       </li>

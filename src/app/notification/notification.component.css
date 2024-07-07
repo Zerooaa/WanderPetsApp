@@ -1,0 +1,129 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-container {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    height: 80vh;
+    background-color: #F9F7DC;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 30px;
+    border-bottom: 1px solid #ccc;
+}
+
+h4 {
+    font-weight: bold;
+}
+
+.markallasread {
+    background: none;
+    border: none;
+    color: #763C00;
+    cursor: pointer;
+}
+
+.markallasread:hover {
+    background-color: #f9f7dc;
+    color: #cf6b21;
+}
+
+.notification-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.notifs-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 0px 10px;
+}
+
+h5 {
+    font-weight: bold;
+}
+
+.see-all {
+    display: flex;
+    justify-content: flex-end;
+    border: none;
+    background: none;
+    color: #763C00;
+    cursor: pointer;
+}
+
+.see-all:hover {
+    text-decoration: underline;
+}
+
+.notifs {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.notifs:hover {
+    background-color: #eae6ca;
+}
+
+.notif-messages, .notif-message {
+    margin-left: 20px;
+    margin-top: 13px;
+}
+
+.indicator {
+    display: flex;
+    position: relative;
+    margin-left: auto;
+}
+
+.notifs-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #763C00;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 30px;
+}
+
+.previous {
+    width: 100%;
+    color: white;
+    background-color: #763C00;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+}
