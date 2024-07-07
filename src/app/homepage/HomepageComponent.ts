@@ -316,4 +316,18 @@ export class HomepageComponent implements OnInit, OnDestroy {
     this.selectedFiles.splice(index, 1);
     this.photoPreviews.splice(index, 1);
   }
+
+  deletePost(post: any) {
+    this.http.delete(`https://localhost:7123/api/PostMessages/${post.id}`)
+      .subscribe({
+        next: () => {
+          this.posts = this.posts.filter(p => p.id !== post.id);
+          this.toastr.success('Post deleted successfully', 'Delete Post');
+        },
+        error: (err) => {
+          console.error('Error deleting post:', err);
+          this.toastr.error('Failed to delete post', 'Delete Post');
+        }
+      });
+  }
 }
